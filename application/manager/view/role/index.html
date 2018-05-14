@@ -1,0 +1,30 @@
+{extend name="layout"/}
+{block name="warp"}
+  <div class="container">
+    <div class="d-flex flex-wrap">
+      {foreach $roles as $role}
+      <div class="col-3 mt-3">
+        <div class="card">
+          <h6 class="card-header"><a href="{:url('manager/role/editRole' ,['roleid'=>$role.id])}">{$role.name}</a></h6>
+          <div class="card-body">
+            <a href="{:url('manager/role/editRoute' ,['roleid'=>$role.id])}" class="btn btn-sm btn-secondary">配置路由</a>
+            <a href="{:url('manager/role/editUser' ,['roleid'=>$role.id])}" class="btn btn-sm btn-secondary">管理用户</a>
+          <a href="{:url('manager/role/remove' ,['roleid'=>$role.id])}" class="btn btn-sm btn-danger">删除</a>
+          </div>
+        </div>
+      </div>
+      {/foreach}
+      <div class="col-3 mt-3 text-center">
+        <a href="{:url('manager/role/editRole')}" class="position-absolute" style="top:48%;">+</a>
+      </div>
+    </div>
+  </div>
+{/block}
+
+{block name="js"}
+<script>
+  $(function(){
+
+  })
+</script>
+{/block}

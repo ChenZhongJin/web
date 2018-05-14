@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh_cn">
+  <head>
+    <meta charset="utf-8">
+    <title>开发文档</title>
+  </head>
+  <body>
+    <div class="flex">
+      <div class="w-20">
+        <ul>
+          {$side|raw}
+        </ul>
+      </div>
+      <div class="grow-2">
+        <h3>{$content.name}</h3>
+        <p>{$content.path}</p>
+        <p>
+          {$content.comment|implode="<br>",###|raw}
+        </p>
+         <h3>类属性</h3>
+         {foreach  $content.property as $property}
+           <p>{$property.comment|implode="<br>",###|raw}</p>
+         <pre><span class="property">{$property.modifier|implode="<br>",###|raw}</span>{$property.compose}</pre>
+         {/foreach}
+         <h3>类方法</h3>
+         {foreach  $content.methods as $method}
+         <p>{$method.comment|implode="<br>",###|raw}</p>
+         <pre><span class="property">{$method.modifier|implode="<br>",###|raw}</span>{$method.compose}</pre>
+         {/foreach}
+      </div>
+    </div>
+    <style media="screen">
+      .flex {display: flex;flex: auto;}
+      .grow-2{flex-grow: 2;}
+      .w-20{width: 20%;}
+      pre{padding:10px 10px;display: block;background-color: #eee;}
+      .property{color:#dc3545;}
+      ul{padding-left: 0px;position: fixed;top: 0;width: 200px;list-style-type: none;border-right: 1px solid #eee;height: 100%;}
+    </style>
+  </body>
+</html>

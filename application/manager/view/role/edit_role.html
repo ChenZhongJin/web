@@ -1,0 +1,27 @@
+{extend name="layout"/}
+{block name="warp"}
+<div class="container">
+  <form class="w-25">
+  	<div class="form-group">
+  		<label for="name">角色名称</label>
+  		<input type="hidden" name="id" value="{$role.id}">
+  		<input type="text" class="form-control" name="name" value="{$role.name}">
+  	</div>
+  	<div class="form-group">
+  		<a href="javascript:;" id="send" class="btn btn-sm btn-dark">设置</a>
+  	</div>
+  </form>
+</div>
+{/block}
+{block name="js"}
+<script>
+	$(function(){
+		$('a#send').click(function(){
+			var map = $('form').serialize()
+			$.post("{:url('manager/role/saveRole')}" ,map,function(resp){
+				response_alert(resp)
+			})
+		})
+	})
+</script>
+{/block}

@@ -1,0 +1,18 @@
+{extend name="layout"/}
+{block name="warp"}
+<div class="container">
+	<form class="w-25">
+		<div class="form-group">
+			<label for="name"></label>
+			<input type="text" class="form-control" name="name" value="{$route.name}">
+		</div>
+	</form>
+</div>
+{/block}
+{block name="js"}
+<script>
+	$(function(){
+
+	})
+</script>
+{/block}
