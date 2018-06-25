@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh_CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {css file="/node_modules/bootstrap/dist/css/bootstrap.min.css"/}
+    {css file="/static/css/common.css"}
+    <title>{block name="title"}{$page.title|default=""}{/block}</title>
+    <meta name="keywords" content="{block name='keywords'}{$page.keywords|default=''}{/block}">
+    <meta name="description" content="{block name='description'}{$page.description|default=''}{/block}">
+</head>
+<body>
+{include file="nav"/}
+{block name="warp"}{/block}
+{js file="/node_modules/jquery/dist/jquery.min.js"/}
+{js file="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"/}
+{js file="/static/js/bundle.js"/}
+{include file="footer"/}
+{block name="warpJS"}{/block}
+{block name="navJS"}
+<script>
+document.querySelector('a#logout').addEventListener('click' ,function(event){event.preventDefault();ajax(event.target.href)})
+</script>
+{/block}
+</body>
+</html>

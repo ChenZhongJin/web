@@ -1,0 +1,12 @@
+<nav class="navbar navbar-expand navbar-light bg-light">
+    <div class="nav navbar-nav mr-auto">
+        <a class="nav-item nav-link active" href="{:url('console_panel')}">概览</a>
+        <a class="nav-item nav-link" href="{:url('_article')}">文章</a>
+        <a class="nav-item nav-link" href="{:url('_productListImg')}">产品</a>
+        <a class="nav-item nav-link" href="{:url('_category')}">栏目</a>
+        <a class="nav-item nav-link" href="{:url('console_website')}">站点</a>
+    </div>
+    <div class="nav navbar-nav">
+        <a class="nav-item nav-link" href="{:url('logout')}" id="logout">{$Think.session.user.name}</a>
+    </div>
+</nav>

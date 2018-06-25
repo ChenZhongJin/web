@@ -1,0 +1,53 @@
+{extend name="layout"/}
+
+{block name="warp"}
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-header">
+                    <p class="card-title mb-0">WEB配置信息</p>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">服务系统：<code>{$Think.PHP_OS}</code></p>
+                    <p class="card-text">WEB代理：<code>{$_SERVER['SERVER_SOFTWARE']}</code></p>
+                    <p class="card-text">上传文件限制：<code>{:get_cfg_var("upload_max_filesize")}</code></p>
+                    <p class="card-text">脚本运行时间：<code>{:get_cfg_var("max_execution_time")}s</code></p>
+                    <p class="card-text">脚本运行内存：<code>{:get_cfg_var("memory_limit")}</code></p>
+                    <p class="card-text">中国时间：<code>{php}date_default_timezone_set('PRC'); echo date('Y/m/d G:i:s'){/php}</code></p>
+                    <p class="card-text">开放模块：<code>{:join(' ',get_loaded_extensions())}</code></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Text</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Item 1</li>
+                    <li class="list-group-item">Item 2</li>
+                    <li class="list-group-item">Item 3</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Title</h4>
+                    <p class="card-text">Text</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Item 1</li>
+                    <li class="list-group-item">Item 2</li>
+                    <li class="list-group-item">Item 3</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="js"}
+...js
+{/block}

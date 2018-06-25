@@ -1,0 +1,43 @@
+{extend name="layout"}
+
+{block name="warp"}
+<div class="container">
+    <form action="" class="w-50">
+        <input type="hidden" name="login_token" value="{$Request.token.login}">
+        <div class="form-group">
+            <label for="name">用户名</label>
+            <input type="text" class="form-control" name="name" value="{$Think.session.form.name}">
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" class="form-control" name="password" value="{$Think.session.form.password}">
+        </div>
+        <div class="form-group">
+            <label for="code">验证码</label>
+            <div class="input-group">
+            <input type="text" class="form-control" name="code" >
+                <span class="input-group-append">
+                    <img src="{:url('login_code')}" id="code" alt="code">
+                </span>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <a href="{:url('login')}" class="btn btn-sm btn-outline-dark" id="login">登录</a>
+        </div>
+    </form>
+</div>
+{/block}
+{block name="js"}
+<script>
+document.querySelector('#login').addEventListener('click',function(e){
+    e.preventDefault();
+    var data = jQuery('form').serialize();
+    ajax(this.href,data);
+});
+document.querySelector('img#code').addEventListener('click',function(e){
+    var url = "{:url('login_code')}";
+    this.setAttribute('src' ,url+'?'+Date.now());
+})
+</script>
+{/block}

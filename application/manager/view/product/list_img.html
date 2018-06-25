@@ -1,0 +1,24 @@
+{extend name="layout"/}
+{block name="warp"}
+<div class="container">
+    <div class="row">
+        <div class="col-12 py-2">
+            <a href="{:url('_productEdit')}" class="btn btn-sm btn-dark rounded-0">添加产品</a>
+        </div>
+        {foreach $list as $item}
+        <div class="col-4">
+            <div class="card rounded-0">
+              <img class="card-img-top" src="">
+              <div class="card-body">
+                <h4 class="card-title">Title</h4>
+                <p class="card-text">Text</p>
+                <a href="{:url('_productEdit',['id'=>$item.id])}" class="btn btn-sm btn-outline-secondary rounded-0">修改</a>
+                <a href="" class="btn btn-sm btn-danger rounded-0">删除</a>
+              </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>
+{/block}{block name="warpJS"}
+{/warpJS}

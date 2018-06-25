@@ -1,0 +1,131 @@
+{extend name="layout"/} {block name="warp"}
+<div class="container">
+    <div class="row">
+        <form action="" class="w-100 my-2" id="product">
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="">产品名称</label>
+                        <input type="text" name="name" class="form-control" value="{$data.name}">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="model">产品型号</label>
+                        <input type="text" name="model" class="form-control" value="{$data.model}">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="category_id">所属系列</label>
+                        <select name="category_id" class="form-control">
+                            {foreach $list as $item}
+                            <option value="{$item.id}" {if $data.category_id==$item.id}selected{/if}>{$item.cname}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="serial_number">产品序列号</label>
+                        <input type="text" name="serial_number" class="form-control" value="{$data.serial_number}">
+                    </div>
+                </div>
+                <div class="col-6" id="previews">
+                    {if $data} {foreach $data.preview as $img}
+                    <div class="preview">
+                        <img src="{$img}" class="img-fluid" alt="">
+                        <input type="hidden" name="preview[]" value="{$img}">
+                    </div>
+                    {/foreach} {/if}
+                    <div class="preview">
+                        <img src="/2.jpg" class="img-fluid" alt="">
+                        <input type="hidden" name="preview[]" value="/2.jpg">
+                    </div>
+                    <div class="preview">
+                        <img src="/2.jpg" class="img-fluid" alt="">
+                        <input type="hidden" name="preview[]" value="/2.jpg">
+                    </div>
+                    <div class="preview">
+                        <img src="/2.jpg" class="img-fluid" alt="">
+                        <input type="hidden" name="preview[]" value="/2.jpg">
+                    </div>
+                    <div class="preview">
+                        <img src="/2.jpg" class="img-fluid" alt="">
+                        <input type="hidden" name="preview[]" value="/2.jpg">
+                    </div>
+
+                    <div class="product-upimg">
+                        <label for="upimg" class="btn btn-sm">上传图片</label>
+                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"></div>
+                        <input type="file" class="d-none" id="upimg" accept="image/*">
+                    </div>
+                </div>
+                <div class="col-6" id="preview_show">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}{block name="warpJS"}
+<script src="/static/axios.min.js"></script>
+<script>
+    (function () {
+        // 注册预览事件
+        function eventLister(element) {
+            // 预览事件
+            element.addEventListener("mouseenter", function (event) {
+                var show = document.querySelector('div#preview_show img');
+                if (show) {
+                    show.src = element.querySelector('img').src;
+                } else {
+                    var nodeImg = document.createElement('img');
+                    nodeImg.classList.add('img-fluid');
+                    nodeImg.src = element.querySelector('img').src;
+                    document.querySelector('div#preview_show').insertAdjacentElement('afterbegin', nodeImg);
+                }
+            });
+            // 删除事件
+            element.addEventListener('click', function (event) {
+                document.querySelector('div#previews').removeChild(element);
+                var previewShow = document.querySelector('div#preview_show');
+                previewShow.removeChild(previewShow.querySelector('img'));
+            })
+        }
+        // 更新图片列表
+        function updateImg(imgURL, imgName) {
+            var tip  = Date.now();
+            var node = `<div class="preview tip-${tip}"><img src="${imgURL}" class="img-fluid"><input type="hidden" name="preview[${imgName}]" value="${imgURL}"></div>`
+            document.querySelector('div.product-upimg').insertAdjacentHTML('beforeBegin', node);
+            var newNode = document.querySelector('div.tip-'+tip);
+            eventLister(newNode);
+        }
+        // 图片预览
+        document.querySelectorAll('div.preview').forEach(function (k) {
+            eventLister(k);
+        })
+        // 图片上传
+        document.querySelector('input#upimg').addEventListener('change', function (event) {
+            formData = new FormData();
+            formData.append('file', event.target.files[0]);
+            axios({
+                url: "{:url('_unity_upimg')}",
+                method: 'POST',
+                data: formData,
+                onUploadProgress: function (progressEvent) {
+                    var bar = document.querySelector('div.product-upimg').children[1];
+                    bar.style.width = ((progressEvent.loaded / progressEvent.total) * 100 + '%');
+                },
+            }).then(function (resp) {
+                if (resp.data.status == 1) {
+                    updateImg(resp.data.location, resp.data.name);
+                    notify({ status: 1, msg: resp.data.name });
+                } else { notify({msg:resp.data}) }
+                // 重置进度条
+                document.querySelector('div.product-upimg').children[1].style.width = '0%';
+            })
+        })
+    })()
+// var data = jQuery('form#product').serializeArray();
+// ajax('{:url("_product_save")}',data);
+</script> {/block}
