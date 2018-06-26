@@ -1,4 +1,4 @@
-<?php /*a:4:{s:58:"C:\site\cms\application\manager\view\product\list_img.html";i:1529739550;s:48:"C:\site\cms\application\manager\view\layout.html";i:1529787075;s:45:"C:\site\cms\application\manager\view\nav.html";i:1529738175;s:48:"C:\site\cms\application\manager\view\footer.html";i:1529279786;}*/ ?>
+<?php /*a:4:{s:58:"C:\site\cms\application\manager\view\product\list_img.html";i:1530004331;s:48:"C:\site\cms\application\manager\view\layout.html";i:1529787075;s:45:"C:\site\cms\application\manager\view\nav.html";i:1529738175;s:48:"C:\site\cms\application\manager\view\footer.html";i:1529279786;}*/ ?>
 <!doctype html>
 <html lang="zh_CN">
 <head>
@@ -29,19 +29,23 @@
         <div class="col-12 py-2">
             <a href="<?php echo url('_productEdit'); ?>" class="btn btn-sm btn-dark rounded-0">添加产品</a>
         </div>
-        <?php foreach($list as $item): ?>
-        <div class="col-4">
-            <div class="card rounded-0">
-              <img class="card-img-top" src="">
-              <div class="card-body">
-                <h4 class="card-title">Title</h4>
-                <p class="card-text">Text</p>
-                <a href="<?php echo url('_productEdit',['id'=>$item['id']]); ?>" class="btn btn-sm btn-outline-secondary rounded-0">修改</a>
-                <a href="" class="btn btn-sm btn-danger rounded-0">删除</a>
-              </div>
+        <div class="col-12">
+            <div class="card-columns">
+                <?php foreach($list as $item): ?>
+                <div class="card">
+                    <img class="card-img-top rounded-0" src="<?php if(count($item['preview'])>0): ?><?php echo htmlentities($item['preview'][0]['src']); endif; ?>">
+                    <div class="card-body">
+                        <p><?php echo htmlentities($item['name']); ?> - <?php echo htmlentities($item['model']); ?></p>
+                        <p class="text-muted text-small"><?php echo htmlentities($item->category->cname); ?></p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="<?php echo url('_productEdit',['id'=>$item['id']]); ?>" class="btn btn-sm btn-dark rounded-0">修改</a>
+                        <a href="<?php echo url('_product_delete',['id'=>$item['id']]); ?>" class="btn btn-sm btn-outline-danger rounded-0" id="delete">删除</a>
+                    </div>
+                </div>
+                <?php endforeach; ?>
             </div>
         </div>
-        <?php endforeach; ?>
     </div>
 </div>
 
@@ -49,6 +53,17 @@
 <script type="text/javascript" src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="/static/js/bundle.js"></script>
 
+
+<script>
+    (function(){
+        document.querySelectorAll('a#delete').forEach(function(element){
+            element.addEventListener('click',function(event){
+                event.preventDefault();
+                ajax(event.target.href);
+            })
+        })
+    })()
+</script>
 
 
 <script>

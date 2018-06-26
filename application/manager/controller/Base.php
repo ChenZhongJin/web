@@ -23,8 +23,8 @@ class Base extends Controller
             'code'  =>$code,
             'msg'   =>$msg,
             'url'   =>empty($url)?null:Url::build($url),
+            'wait'  =>3,
         ];
-        $more['wait'] = $more['wait'] * 1000;
         return json(array_merge($response,$more));
     }
 }

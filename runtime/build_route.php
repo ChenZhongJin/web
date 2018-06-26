@@ -23,5 +23,7 @@ Route::post('/console/website/find','manager/Console/websiteFind')->name('consol
 Route::post('/console/website/delete','manager/Console/websiteDelete')->name('console_website_delete');
 Route::post('/console/product/save','manager/Product/save')->name('_product_save');
 Route::get('/console/product/[:id]','manager/Product/edit')->name('_productEdit');
+Route::post('/console/product/update','manager/Product/update')->name('_product_update');
 Route::get('/console/product/listimg','manager/Product/listImg')->name('_productListImg');
 Route::get('/console/product/listtxt','manager/Product/listTxt')->name('_productListTxt');
+Route::post('/console/product/delete/:id','manager/Product/delete')->name('_product_delete');

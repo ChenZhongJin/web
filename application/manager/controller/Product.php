@@ -6,9 +6,11 @@ use think\Controller;
 use think\Request;
 use app\common\model\Product as ProductModel;
 use app\common\model\Category as CategoryModel;
-
+use app\common\unity\Unity;
+use think\Db;
 class Product extends Base
 {
+    private     $categoryType = 2;
     /**
      * 显示资源列表
      *
@@ -36,12 +38,15 @@ class Product extends Base
      * @return \think\Response
      * @route('/console/product/save','post')->name('_product_save')
      */
-    public function save(Request $request)
+    public function save(Request $request,ProductModel $product)
     {
-        // $data = $request->param();
-        // return $data;
-        $file = $request->file('file');
-        dump($file);
+        $data = $request->param();
+        $valid= $this->validate($data,'\\app\\common\\Valid.ProductCreate');
+        if ($valid !==true) {
+            return Unity::error($valid);
+        }
+        $product->save($data);
+        return Unity::success('已新增','_productListImg');
     }
 
     /**
@@ -64,9 +69,8 @@ class Product extends Base
      */
     public function edit($id=0,ProductModel $product,CategoryModel $cats)
     {
-        return $this->info();
         $data = $product->get($id);
-        $list = $cats->where(['type'=>2])->select();
+        $list = $cats->where(['type'=>$this->categoryType])->select();
         $this->assign('data',$data);
         $this->assign('list',$list);
         return $this->fetch();
@@ -76,12 +80,17 @@ class Product extends Base
      * 保存更新的资源
      *
      * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
+     * @route('/console/product/update','post')->name('_product_update')
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,ProductModel $product)
     {
-        //
+        $data = $request->param();
+        $valid = Unity::valid($data,'ProductUpdate');
+        if($valid!==true){
+            return Unity::error($valid);
+        }
+        $product->update($data);
+        return Unity::success('已更新','_productListImg');
     }
     /**
      * 图片列表
@@ -91,7 +100,10 @@ class Product extends Base
      */
     public function listImg(ProductModel $product)
     {
-        $list = $product->all();
+        $option = [
+            'list_rows'=>2,
+        ];
+        $list = $product->paginate(2,false,$option);
         $this->assign('list',$list);
         return $this->fetch();
     }
@@ -113,9 +125,12 @@ class Product extends Base
      *
      * @param  int  $id
      * @return \think\Response
+     * @route('/console/product/delete/:id','post')->name('_product_delete')
      */
-    public function delete($id)
+    public function delete($id,ProductModel $product)
     {
-        //
+        $item = $product->get($id);
+        $item->delete();
+        return Unity::success($item->name.'已删除','_productListImg');
     }
 }
