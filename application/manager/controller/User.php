@@ -5,7 +5,7 @@ namespace app\manager\controller;
  * Manager.User
  *
  */
-class User
+class User extends Base
 {
 
 }

@@ -5,3 +5,7 @@
 thinkphp
 .env
 /public/data/
+
+/runtime
+!/runtime/build_route.php
+phpcs.xml

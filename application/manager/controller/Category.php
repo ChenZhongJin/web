@@ -9,7 +9,7 @@ use think\facade\Route;
 
 Route::pattern(['parent'=>'\d+']);
 Route::pattern(['id'=>'\d+']);
-class Category extends Controller
+class Category extends Base
 {
     /**
      * 分类列表

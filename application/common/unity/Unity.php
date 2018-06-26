@@ -9,6 +9,8 @@ use app\common\Valid;
 use think\facade\Url;
 class Unity
 {
+    const version = '1.07';
+    const devMark = '牙签';
     /**
      * 汉字转拼音
      *

@@ -7,7 +7,7 @@ use think\Request;
 use app\common\model\Website;
 use app\common\validate\Website as WebsiteValidate;
 
-class Console extends Controller
+class Console extends Base
 {
     /**
      * 后台首页

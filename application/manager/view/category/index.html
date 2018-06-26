@@ -1,13 +1,13 @@
 {extend name="layout"/} {block name="warp"}
 <div class="container">
     <div class="row">
-        <div class="w-100">
-            <a href="{:url('_categoryEdit',['parent'=>$parent.id,'id'=>0])}" class="btn btn-info rounded-0">新增栏目</a>
+        <div class="col-12 py-2">
+            <a href="{:url('_categoryEdit',['parent'=>$parent.id,'id'=>0])}" class="btn btn-sm btn-dark rounded-0">新增栏目</a>
             {if $parent.id}
-            <a href="{:url('_category',['parent'=>$parent.parent])}" class="btn btn-info rounded-0">{$parent.cname}</a>
+            <a href="{:url('_category',['parent'=>$parent.parent])}" class="btn btn-sm btn-dark rounded-0">{$parent.cname}</a>
             {/if}
         </div>
-        <div class="w-100">
+        <div class="col-12">
             <table class="table">
                 <thead>
                     <tr>
@@ -28,7 +28,7 @@
                         <td>{$item.type_name}</td>
                         <td>{$item.path}</td>
                         <td>
-                            <a href="{:url('_categoryEdit',['id'=>$item.id,'parent'=>$parent.id])}" class="btn btn-sm btn-outline-secondary rounded-0">修改</a>
+                            <a href="{:url('_categoryEdit',['id'=>$item.id,'parent'=>$parent.id])}" class="btn btn-sm btn-dark rounded-0">修改</a>
                             <a href="{:url('_category_delete',['id'=>$item.id])}" class="btn btn-sm btn-outline-danger rounded-0" id="delete">删除</a>
                         </td>
                     </tr>

@@ -8,9 +8,11 @@ use app\common\model\Product as ProductModel;
 use app\common\model\Category as CategoryModel;
 use app\common\unity\Unity;
 use think\Db;
+use Symfony\Component\DomCrawler\Crawler;
+
 class Product extends Base
 {
-    private     $categoryType = 2;
+    private $categoryType = 2;
     /**
      * 显示资源列表
      *
@@ -38,15 +40,15 @@ class Product extends Base
      * @return \think\Response
      * @route('/console/product/save','post')->name('_product_save')
      */
-    public function save(Request $request,ProductModel $product)
+    public function save(Request $request, ProductModel $product)
     {
         $data = $request->param();
-        $valid= $this->validate($data,'\\app\\common\\Valid.ProductCreate');
+        $valid= $this->validate($data, '\\app\\common\\Valid.ProductCreate');
         if ($valid !==true) {
             return Unity::error($valid);
         }
         $product->save($data);
-        return Unity::success('已新增','_productListImg');
+        return Unity::success('已新增', '_productListImg');
     }
 
     /**
@@ -67,12 +69,12 @@ class Product extends Base
      * @return \think\Response
      * @route('/console/product/[:id]','get')->name('_productEdit')
      */
-    public function edit($id=0,ProductModel $product,CategoryModel $cats)
+    public function edit($id=0, ProductModel $product, CategoryModel $cats)
     {
         $data = $product->get($id);
         $list = $cats->where(['type'=>$this->categoryType])->select();
-        $this->assign('data',$data);
-        $this->assign('list',$list);
+        $this->assign('data', $data);
+        $this->assign('list', $list);
         return $this->fetch();
     }
 
@@ -82,15 +84,15 @@ class Product extends Base
      * @param  \think\Request  $request
      * @route('/console/product/update','post')->name('_product_update')
      */
-    public function update(Request $request,ProductModel $product)
+    public function update(Request $request, ProductModel $product)
     {
         $data = $request->param();
-        $valid = Unity::valid($data,'ProductUpdate');
-        if($valid!==true){
+        $valid = Unity::valid($data, 'ProductUpdate');
+        if ($valid!==true) {
             return Unity::error($valid);
         }
         $product->update($data);
-        return Unity::success('已更新','_productListImg');
+        return Unity::success('已更新', '_productListImg');
     }
     /**
      * 图片列表
@@ -98,13 +100,14 @@ class Product extends Base
      * @return void
      * @route('/console/product/listimg','get')->name('_productListImg')
      */
-    public function listImg(ProductModel $product)
+    public function listImg(ProductModel $product ,$rows=10)
     {
-        $option = [
-            'list_rows'=>2,
-        ];
-        $list = $product->paginate(2,false,$option);
-        $this->assign('list',$list);
+        $list = $product->paginate($rows);
+        $page = preg_replace('/<(\/?)span/','<$1a',$list->render());
+        $page = preg_replace('/<a([^>]*)>/is','<a class="page-link" $1>',$page);
+        $page = preg_replace('/<ul.*?>/','<ul class="pagination justify-content-center">',$page);
+        $this->assign('page',$page);
+        $this->assign('list', $list);
         return $this->fetch();
     }
     /**
@@ -116,7 +119,7 @@ class Product extends Base
     public function listTxt()
     {
         $list = $product->all();
-        $this->assign('list',$list);
+        $this->assign('list', $list);
         return $this->fetch();
     }
 
@@ -127,10 +130,10 @@ class Product extends Base
      * @return \think\Response
      * @route('/console/product/delete/:id','post')->name('_product_delete')
      */
-    public function delete($id,ProductModel $product)
+    public function delete($id, ProductModel $product)
     {
         $item = $product->get($id);
         $item->delete();
-        return Unity::success($item->name.'已删除','_productListImg');
+        return Unity::success($item->name.'已删除', '_productListImg');
     }
 }

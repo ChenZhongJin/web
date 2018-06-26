@@ -10,7 +10,7 @@ use app\common\model\Category as CategoryModel;
 use think\facade\Session;
 use Sunra\PhpSimple\HtmlDomParser;
 
-class Article extends Controller
+class Article extends Base
 {
     /**
      * 显示资源列表
@@ -102,9 +102,14 @@ class Article extends Controller
      * @return void
      * @route('/console/article/list','get')->name('_article')
      */
-    public function list(ArticleModle $atc )
+    public function list(ArticleModle $atc ,$rows=10)
     {
-        $this->assign('list',$atc->all());
+        $list = $atc->paginate($rows);
+        $page = preg_replace('/<(\/?)span/','<$1a',$list->render());
+        $page = preg_replace('/<a([^>]*)>/is','<a class="page-link" $1>',$page);
+        $page = preg_replace('/<ul.*?>/','<ul class="pagination justify-content-center">',$page);
+        $this->assign('list',$list);
+        $this->assign('page',$page);
         return $this->fetch();
     }
 }

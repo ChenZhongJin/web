@@ -4,10 +4,15 @@ namespace app\manager\controller;
 
 use think\Controller;
 use think\facade\Url;
+use app\common\unity\Unity;
 
 class Base extends Controller
 {
-
+    public function __construct()
+    {
+        parent::__construct();
+        $this->assign('APP' ,['version'=>Unity::version,'devMark'=>Unity::devMark]);
+    }
     /**
      * json返回
      *
