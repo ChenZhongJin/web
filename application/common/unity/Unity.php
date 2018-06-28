@@ -87,10 +87,16 @@ class Unity
      */
     public static function response($code = 0, $msg = '', $url = null, $more=[])
     {
+        if (is_array($url)) {
+            list($uri,$param) = $url;
+            $url = Url::build($uri,$param);
+        } else {
+            $url = Url::build($url);
+        }
         $response = [
             'code'  =>$code,
             'msg'   =>$msg,
-            'url'   =>empty($url)?false:Url::build($url),
+            'url'   =>empty($url)?false:$url,
             'wait'  =>3,
         ];
         return json(array_merge($response, $more));
@@ -134,5 +140,9 @@ class Unity
             return substr($html,$start,$len);
         }
         return $html;
+    }
+    public static function ResponseTemplate()
+    {
+        
     }
 }

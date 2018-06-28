@@ -15,6 +15,7 @@ class Valid extends Validate
 	protected $rule = [
         'id|索引'               =>  'number',
         'name|名称'             =>  'require|max:200',
+        'cname|识别名称'        =>   'require|max:20',
         'title|标题'            =>  'require|max:200|token',
         'keywords|关键字'       =>  'max:200',
         'description|描述'      =>  'max:200',
@@ -66,5 +67,13 @@ class Valid extends Validate
             'title','keywords','description',
             'name','model','category_id','serial_number',
             'preview','content']);
+    }
+    public function sceneSiteCreate()
+    {
+        return $this->only(['name','cname','content']);
+    }
+    public function sceneSiteUpdate()
+    {
+        return $this->only(['id','name','cname','content']);
     }
 }

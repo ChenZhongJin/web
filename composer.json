@@ -22,7 +22,8 @@
         "overtrue/pinyin": "~3.0",
         "sunra/php-simple-html-dom-parser": "^1.5",
         "symfony/dom-crawler": "^4.1",
-        "symfony/css-selector": "^4.1"
+        "symfony/css-selector": "^4.1",
+        "symfony/filesystem": "^4.1"
     },
     "autoload": {
         "psr-4": {

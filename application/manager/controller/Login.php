@@ -1,14 +1,19 @@
 <?php
 
-namespace app\home\controller;
+namespace app\manager\controller;
 
 use think\Controller;
 use think\Request;
 use app\common\model\User;
 use think\facade\Session;
-
+use app\common\unity\Unity;
 class Login extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->assign('APP' ,['version'=>Unity::version,'devMark'=>Unity::devMark]);
+    }
     /**
      * 用户登录页面
      *

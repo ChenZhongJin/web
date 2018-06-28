@@ -1,11 +1,20 @@
+#Think PHP
 /.idea
-/.vscode
-/vendor
 *.log
 thinkphp
 .env
-/public/data/
+/runtime/
+/vendor/
+/public/
 
-/runtime
-!/runtime/build_route.php
+#ide
 phpcs.xml
+/.vscode/
+
+#root
+.travis.yml
+build.php
+think
+
+#config
+/config/database.php

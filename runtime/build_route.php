@@ -1,9 +1,5 @@
 <?php 
 //根据 Annotation 自动生成的路由规则
-Route::get('/login','home/Login/index')->name('login_panel');
-Route::post('/login','home/Login/logIn')->name('login');
-Route::rule('/login/out','home/Login/logOut')->name('logout');
-Route::get('/login/code','home/Login/loginCode')->name('login_code');
 Route::get('/console/article/edit/[:id]','manager/Article/edit')->name('_articleEdit');
 Route::post('/console/article/save','manager/Article/save')->name('_article_save');
 Route::post('/console/article/update','manager/Article/update')->name('_article_update');
@@ -14,16 +10,20 @@ Route::post('/console/category/save','manager/Category/save')->name('_category_s
 Route::get('/console/category/edit/:parent/:id','manager/Category/edit')->name('_categoryEdit');
 Route::post('/console/category/update','manager/Category/update')->name('_category_update');
 Route::post('/console/category/delete/:id','manager/Category/delete')->name('_category_delete');
-Route::get('/console','manager/Console/index')->name('console_panel');
-Route::get('/console/website','manager/Console/webSite')->name('console_website');
-Route::post('/console/website/save','manager/Console/websiteSaveAll')->name('console_website_save');
-Route::post('/console/website/update','manager/Console/websiteUpdate')->name('console_website_update');
-Route::post('/console/website/create','manager/Console/websiteCreate')->name('console_website_create');
-Route::post('/console/website/find','manager/Console/websiteFind')->name('console_website_find');
-Route::post('/console/website/delete','manager/Console/websiteDelete')->name('console_website_delete');
+Route::get('/console','manager/Console/index')->name('_console');
+Route::post('/console/site/save','manager/Console/siteSaveAll')->name('_site_save');
+Route::post('/console/site/update','manager/Console/siteUpdate')->name('_site_update');
+Route::post('/console/site/create','manager/Console/websiteCreate')->name('_site_create');
+Route::post('/console/site/find','manager/Console/siteFind')->name('_site_find');
+Route::post('/console/site/delete','manager/Console/siteDelete')->name('_site_delete');
+Route::get('/login','manager/Login/index')->name('login_panel');
+Route::post('/login','manager/Login/logIn')->name('login');
+Route::rule('/login/out','manager/Login/logOut')->name('logout');
+Route::get('/login/code','manager/Login/loginCode')->name('login_code');
 Route::post('/console/product/save','manager/Product/save')->name('_product_save');
 Route::get('/console/product/[:id]','manager/Product/edit')->name('_productEdit');
 Route::post('/console/product/update','manager/Product/update')->name('_product_update');
 Route::get('/console/product/listimg','manager/Product/listImg')->name('_productListImg');
 Route::get('/console/product/listtxt','manager/Product/listTxt')->name('_productListTxt');
 Route::post('/console/product/delete/:id','manager/Product/delete')->name('_product_delete');
+Route::get('/console/theme','manager/Theme/index')->name('_theme');

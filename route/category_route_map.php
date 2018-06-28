@@ -1,0 +1,13 @@
+<?php
+Route::get('/zhongguo/[:page]','home/Home/senseRoute');
+Route::get('/henan/[:page]','home/Home/senseRoute');
+Route::get('//[:page]','home/Home/senseRoute');
+Route::get('/xuchang/[:page]','home/Home/senseRoute');
+Route::get('//[:page]','home/Home/senseRoute');
+Route::get('/jiangxi/[:page]','home/Home/senseRoute');
+Route::get('//[:page]','home/Home/senseRoute');
+Route::get('/shanghai/[:page]','home/Home/senseRoute');
+Route::get('/feisheng/[:page]','home/Home/senseRoute');
+Route::get('/nibianqi/[:page]','home/Home/senseRoute');
+Route::get('/xiuzhengbo/[:page]','home/Home/senseRoute');
+Route::get('/zhengxianbo/[:page]','home/Home/senseRoute');

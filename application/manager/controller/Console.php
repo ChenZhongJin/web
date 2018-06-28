@@ -4,39 +4,29 @@ namespace app\manager\controller;
 
 use think\Controller;
 use think\Request;
-use app\common\model\Website;
-use app\common\validate\Website as WebsiteValidate;
-
+use app\common\model\Site as SiteModel;
+use app\common\unity\Unity;
+use app\common\Valid;
 class Console extends Base
 {
-    /**
-     * 后台首页
-     *
-     *
-     * @route('/console' ,'get')->name('console_panel')
-     */
-    public function index()
-    {
-        return $this->fetch();
-    }
 
     /**
      * 站点配置
      *
-     * @route('/console/website','get')->name('console_website')
+     * @route('/console','get')->name('_console')
      */
-    public function webSite(Request $request, Website $website)
+    public function index(Request $request, SiteModel $site)
     {
-        return $this->fetch(null, [
-            'data' => $website->select()
-        ]);
+        $data = $site->all();
+        $this->assign('data',$data);
+        return $this->fetch();
     }
 
     /**
      * 批量更新站点配置信息
-     * @route('/console/website/save','post')->name('console_website_save')
+     * @route('/console/site/save','post')->name('_site_save')
      */
-    public function websiteSaveAll(Request $request ,Website $website)
+    public function siteSaveAll(Request $request ,SiteModel $site)
     {
         $data=[];
         foreach ($request->param() as $key => $value) {
@@ -45,57 +35,57 @@ class Console extends Base
                 'content'   =>  $value
             ];
         }
-        $resule = $website->saveAll($data);
-        return $this->success('完成操作');
+        $resule = $site->saveAll($data);
+        return $this->success('完成操作','_console');
     }
 
     /**
      * 更新配置信息
      * 
-     * @route('/console/website/update','post')->name('console_website_update')
+     * @route('/console/site/update','post')->name('_site_update')
      */
-    public function websiteUpdate(Request $request ,Website $website)
+    public function siteUpdate(Request $request ,SiteModel $site)
     {
         $data = $request->only(['id' ,'name' ,'cname' ,'content']);
-        $valid = $this->validate($data ,'\app\common\validate\Website.update');
+        $valid = Unity::valid($data ,'SiteUpdate');
         if ($valid !==true) {
-            return $this->error($valid);
+            return Unity::error($valid);
         }
-        $website->allowField(true)->isUpdate(true)->save($data);
-        return $this->success('完成操作');
+        $site->allowField(true)->isUpdate(true)->save($data);
+        return Unity::success('完成操作','_console');
     }
 
     /**
      * 新增站点配置
      *
-     * @route('/console/website/create','post')->name('console_website_create')
+     * @route('/console/site/create','post')->name('_site_create')
      */
-    public function websiteCreate(Request $request,Website $website)
+    public function websiteCreate(Request $request,SiteModel $site)
     {
         $data = $request->param();
-        $valid = $this->validate($data ,'\app\common\validate\Website.create');
+        $valid = Unity::valid($data ,'SiteCreate');
         if ($valid !==true) {
-            return $this->error($valid);
+            return Unity::error($valid);
         }
         if ($data['id']) {
-            $website->allowField(true)->update($data);
+            $site->allowField(true)->update($data);
         }else{
-            $website->allowField(true)->save($data);
+            $site->allowField(true)->save($data);
         }
 
-        return $this->success('完成操作');
+        return Unity::success('完成操作','_console');
     }
     /**
      * 查找某1条信息
      *
      * @param Request $request
      * @param Website $website
-     * @route('/console/website/find','post')->name('console_website_find')
+     * @route('/console/site/find','post')->name('_site_find')
      */
-    public function websiteFind(Request $request,Website $website)
+    public function siteFind(Request $request,SiteModel $site)
     {
         $data = $request->only(['name']);
-        $result = $website->get($data);
+        $result = $site->get($data);
         if (!empty($result)) {
             return $result;
         }
@@ -107,12 +97,12 @@ class Console extends Base
      * @param Request $request
      * @param Website $website
      * @return void
-     * @route('/console/website/delete','post')->name('console_website_delete')
+     * @route('/console/site/delete','post')->name('_site_delete')
      */
-    public function websiteDelete(Request $request,Website $website)
+    public function siteDelete(Request $request,SiteModel $site)
     {
         $id = $request->param('id');
-        $website->get($id)->delete();
-        return $this->success('完成操作');
+        $site->get($id)->delete();
+        return Unity::success('完成操作','_console');
     }
 }

@@ -1,4 +1,4 @@
-<?php /*a:4:{s:58:"C:\site\cms\application\manager\view\product\list_img.html";i:1530024439;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530034941;s:45:"C:\site\cms\application\manager\view\nav.html";i:1529738175;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530033920;}*/ ?>
+<?php /*a:4:{s:58:"C:\site\cms\application\manager\view\product\list_img.html";i:1530024439;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530034941;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530105506;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530035442;}*/ ?>
 <!doctype html>
 <html lang="zh_CN">
 
@@ -13,11 +13,11 @@
 <body>
     <nav class="navbar navbar-expand navbar-light bg-light">
     <div class="nav navbar-nav mr-auto">
-        <a class="nav-item nav-link active" href="<?php echo url('console_panel'); ?>">概览</a>
+        <a class="nav-item nav-link" href="<?php echo url('_console'); ?>">站点</a>
         <a class="nav-item nav-link" href="<?php echo url('_article'); ?>">文章</a>
         <a class="nav-item nav-link" href="<?php echo url('_productListImg'); ?>">产品</a>
         <a class="nav-item nav-link" href="<?php echo url('_category'); ?>">栏目</a>
-        <a class="nav-item nav-link" href="<?php echo url('console_website'); ?>">站点</a>
+        <a class="nav-item nav-link active" href="<?php echo url('_theme'); ?>">主题</a>
     </div>
     <div class="nav navbar-nav">
         <a class="nav-item nav-link" href="<?php echo url('logout'); ?>" id="logout"><?php echo htmlentities(app('session')->get('user.name')); ?></a>
@@ -51,6 +51,7 @@
     <script type="text/javascript" src="/static/js/bundle.js"></script> <footer class="w-100 mt-3">
     <div class="text-center">
         <p class="text-muted text-small">古都企业网站系统 version:<?php echo htmlentities($APP['version']); ?> .Develop Mark:<?php echo htmlentities($APP['devMark']); ?></p>
+        <p class="text-muted text-small"><a href="https://github.com/ChenZhongJin/web" class="text-muted">GitHub 分支dev_s</a></p>
     </div>
 </footer> 
 <script>

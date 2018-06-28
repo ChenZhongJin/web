@@ -1,0 +1,16 @@
+{extend name="layout"/} {block name="warp"}
+<div class="container">
+    <div class="row">
+        {foreach $list as $item}
+        <div class="col-4">
+            <p>{$item.name}</p>
+            <img src="{$item.pic}" alt="">
+            <p><a href="" class="btn btn-sm">AAA</a></p>
+        </div>
+        {/foreach}
+    </div>
+</div>
+{/block} {block name="warpJS"}
+<script>
+
+</script> {/block}

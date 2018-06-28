@@ -6,7 +6,8 @@ use think\Controller;
 use think\Request;
 use app\common\model\Category as CategoryModle;
 use think\facade\Route;
-
+use Symfony\Component\Filesystem\Filesystem;
+use app\common\unity\Unity;
 Route::pattern(['parent'=>'\d+']);
 Route::pattern(['id'=>'\d+']);
 class Category extends Base
@@ -23,12 +24,10 @@ class Category extends Base
             $data['id']     =0;
             $data['parent'] =0;
         }
+        $list = $cats->where(['parent'=>$parent])->select();
         $this->assign('parent', $data);
-        $this->assign(
-            'list',
-            $cats->where(['parent'=>$parent])
-                        ->select()
-        );
+        $this->assign('list',$list);
+        $this->createRouteMap();
         return $this->fetch();
     }
 
@@ -44,13 +43,13 @@ class Category extends Base
         $data = $request->param();
         $valid= $this->validate($data, '\\app\\common\\validate\\Category.save');
         if ($valid !==true) {
-            return $this->error($valid);
+            return Unity::error($valid);
         }
         if($data['parent']!=0){
             $data['type']=$cats->get($data['parent'])->type;
         }
         $cats->allowField(true)->save($data);
-        return $this->success('完成新增', url('_category',['parent'=>$cats->parent]));
+        return Unity::success('完成新增', ['_category',['parent'=>$cats->parent]]);
     }
 
     /**
@@ -106,11 +105,11 @@ class Category extends Base
         $data = $request->param();
         $valid = $this->validate($data, '\\app\\common\\validate\\Category.update');
         if ($valid !==true) {
-            return $this->error($valid);
+            return Unity::error($valid);
         }
         $result = $cats->allowField(true)->update($data);
         
-        return $this->success('已更新', url('_category',['parent'=>$result->parent]));
+        return Unity::success('已更新', ['_category',['parent'=>$result->parent]]);
     }
 
     /**
@@ -130,5 +129,22 @@ class Category extends Base
         }
         $data->delete();
         return $this->success('已删除',$jump);
+    }
+
+    /**
+     * 生成栏目路由文件
+     *
+     * @return void
+     */
+    private function createRouteMap()
+    {
+        $class = 'home/Home/senseRoute';
+        $data  = CategoryModle::all();
+        $rule  = '<?php'.PHP_EOL;
+        foreach ($data as $item) {
+            $rule .= 'Route::get(\'/' .$item->path .'/[:page]\',\'' .$class .'\');'.PHP_EOL;
+        }
+        $fs    = new Filesystem();
+        $fs->dumpFile(\App::getRoutePath().'category_route_map.php',$rule);
     }
 }
