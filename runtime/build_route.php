@@ -2,10 +2,14 @@
 //根据 Annotation 自动生成的路由规则
 Route::get('/article/:id','home/Home/article')->name('article');
 Route::get('/product/:id','home/Home/product')->name('product');
+Route::get('/login','home/Login/index')->name('login_panel');
+Route::post('/login','home/Login/logIn')->name('login');
+Route::rule('/login/out','home/Login/logOut')->name('logout');
+Route::get('/login/code','home/Login/loginCode')->name('login_code');
 Route::get('/console/article/edit/[:id]','manager/Article/edit')->name('_articleEdit');
 Route::post('/console/article/save','manager/Article/save')->name('_article_save');
 Route::post('/console/article/update','manager/Article/update')->name('_article_update');
-Route::get('/console/article/delete/:id','manager/Article/delete')->name('_article_delete');
+Route::post('/console/article/delete/:id','manager/Article/delete')->name('_article_delete');
 Route::get('/console/article/list','manager/Article/list')->name('_article');
 Route::get('/console/category/[:parent]','manager/Category/index')->name('_category');;
 Route::post('/console/category/save','manager/Category/save')->name('_category_save');
@@ -17,10 +21,6 @@ Route::post('/console/site/saveAll','manager/Console/siteSaveAll')->name('_site_
 Route::post('/console/site/save','manager/Console/siteSave')->name('_site_save');
 Route::post('/console/site/find','manager/Console/siteFind')->name('_site_find');
 Route::post('/console/site/delete','manager/Console/siteDelete')->name('_site_delete');
-Route::get('/login','manager/Login/index')->name('login_panel');
-Route::post('/login','manager/Login/logIn')->name('login');
-Route::rule('/login/out','manager/Login/logOut')->name('logout');
-Route::get('/login/code','manager/Login/loginCode')->name('login_code');
 Route::post('/console/product/save','manager/Product/save')->name('_product_save');
 Route::get('/console/product/[:id]','manager/Product/edit')->name('_productEdit');
 Route::post('/console/product/update','manager/Product/update')->name('_product_update');

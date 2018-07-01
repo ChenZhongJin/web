@@ -1,4 +1,4 @@
-<?php /*a:4:{s:58:"C:\site\cms\application\manager\view\product\list_img.html";i:1530024439;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530281994;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;}*/ ?>
+<?php /*a:4:{s:58:"C:\site\cms\application\manager\view\product\list_img.html";i:1530024439;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530455309;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;}*/ ?>
 <!doctype html>
 <html lang="zh_CN">
 
@@ -8,6 +8,7 @@
     <title><?php echo htmlentities((isset($page['title']) && ($page['title'] !== '')?$page['title']:"")); ?></title>
     <meta name="keywords" content="<?php echo htmlentities((isset($page['keywords']) && ($page['keywords'] !== '')?$page['keywords']:'')); ?>">
     <meta name="description" content="<?php echo htmlentities((isset($page['description']) && ($page['description'] !== '')?$page['description']:'')); ?>">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 </head>
 
 <body>

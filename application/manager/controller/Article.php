@@ -66,7 +66,7 @@ class Article extends Base
      *
      * @param  int  $id
      * @return \think\Response
-     * @route('/console/article/delete/:id','get')->name('_article_delete')
+     * @route('/console/article/delete/:id','post')->name('_article_delete')
      */
     public function delete($id,ArticleModle $atc)
     {

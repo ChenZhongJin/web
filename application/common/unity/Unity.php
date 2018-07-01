@@ -79,7 +79,7 @@ class Unity
             'code'  =>$code,
             'msg'   =>$msg,
             'url'   =>$url,
-            'wait'  =>3,
+            'wait'  =>1,
         ];
         return json(array_merge($response, $more));
     }

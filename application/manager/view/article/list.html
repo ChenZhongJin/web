@@ -28,7 +28,7 @@
                         <td>{$item.create_time|date="Y/m/d"}</td>
                         <td>
                             <a href="{:url('_articleEdit',['id'=>$item.id])}" class="btn btn-sm btn-dark rounded-0">编辑</a>
-                            <a href="{:url('_article_delete',['id'=>$item.id])}" class="btn btn-sm btn-outline-danger rounded-0">删除</a>
+                            <a href="{:url('_article_delete',['id'=>$item.id])}" class="btn btn-sm btn-outline-danger rounded-0" id="article_del">删除</a>
                         </td>
                     </tr>
                     {/foreach}
@@ -40,5 +40,12 @@
 </div>
 {/block} {block name="warpJS"}
 <script>
-
+(function(){
+    document.querySelectorAll('a#article_del').forEach(function(element){
+        element.addEventListener('click',function(event){
+            event.preventDefault();
+            ajax(event.target.href,null);
+        })
+    })
+})()
 </script> {/block}

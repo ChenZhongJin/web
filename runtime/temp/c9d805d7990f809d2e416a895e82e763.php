@@ -1,4 +1,4 @@
-<?php /*a:5:{s:54:"C:\site\cms\application\manager\view\product\edit.html";i:1530357163;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530281994;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;s:48:"C:\site\cms\application\manager\view\editor.html";i:1529937295;}*/ ?>
+<?php /*a:5:{s:54:"C:\site\cms\application\manager\view\product\edit.html";i:1530357217;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530455309;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;s:48:"C:\site\cms\application\manager\view\editor.html";i:1529937295;}*/ ?>
 <!doctype html>
 <html lang="zh_CN">
 
@@ -8,6 +8,7 @@
     <title><?php echo htmlentities((isset($page['title']) && ($page['title'] !== '')?$page['title']:"")); ?></title>
     <meta name="keywords" content="<?php echo htmlentities((isset($page['keywords']) && ($page['keywords'] !== '')?$page['keywords']:'')); ?>">
     <meta name="description" content="<?php echo htmlentities((isset($page['description']) && ($page['description'] !== '')?$page['description']:'')); ?>">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 </head>
 
 <body>
@@ -77,7 +78,6 @@
                 </div>
                 <div class="col-12 mb-2">
                     <small>产品页面内容</small>
-                    <?php echo htmlentities($data['content']); ?>
                     <textarea id="edit" class="form-control"><?php echo htmlentities($data['content']); ?></textarea>
                 </div>
                 <div class="col-12">

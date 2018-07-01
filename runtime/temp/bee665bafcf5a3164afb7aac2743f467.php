@@ -1,4 +1,4 @@
-<?php /*a:4:{s:54:"C:\site\cms\application\manager\view\article\list.html";i:1530035151;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530281994;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;}*/ ?>
+<?php /*a:4:{s:54:"C:\site\cms\application\manager\view\article\list.html";i:1530469995;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530455309;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;}*/ ?>
 <!doctype html>
 <html lang="zh_CN">
 
@@ -8,6 +8,7 @@
     <title><?php echo htmlentities((isset($page['title']) && ($page['title'] !== '')?$page['title']:"")); ?></title>
     <meta name="keywords" content="<?php echo htmlentities((isset($page['keywords']) && ($page['keywords'] !== '')?$page['keywords']:'')); ?>">
     <meta name="description" content="<?php echo htmlentities((isset($page['description']) && ($page['description'] !== '')?$page['description']:'')); ?>">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 </head>
 
 <body>
@@ -54,7 +55,7 @@
                         <td><?php echo htmlentities(date("Y/m/d",!is_numeric($item['create_time'])? strtotime($item['create_time']) : $item['create_time'])); ?></td>
                         <td>
                             <a href="<?php echo url('_articleEdit',['id'=>$item['id']]); ?>" class="btn btn-sm btn-dark rounded-0">编辑</a>
-                            <a href="<?php echo url('_article_delete',['id'=>$item['id']]); ?>" class="btn btn-sm btn-outline-danger rounded-0">删除</a>
+                            <a href="<?php echo url('_article_delete',['id'=>$item['id']]); ?>" class="btn btn-sm btn-outline-danger rounded-0" id="article_del">删除</a>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -80,7 +81,14 @@
     })()
 </script> <?php endif; ?> 
 <script>
-
+(function(){
+    document.querySelectorAll('a#article_del').forEach(function(element){
+        element.addEventListener('click',function(event){
+            event.preventDefault();
+            ajax(event.target.href,null);
+        })
+    })
+})()
 </script> 
 </body>
 

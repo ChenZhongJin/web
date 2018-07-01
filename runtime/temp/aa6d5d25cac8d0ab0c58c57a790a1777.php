@@ -1,4 +1,4 @@
-<?php /*a:4:{s:55:"C:\site\cms\application\manager\view\console\index.html";i:1530354654;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530281994;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;}*/ ?>
+<?php /*a:4:{s:55:"C:\site\cms\application\manager\view\console\index.html";i:1530470284;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530455309;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;}*/ ?>
 <!doctype html>
 <html lang="zh_CN">
 
@@ -8,6 +8,7 @@
     <title><?php echo htmlentities((isset($page['title']) && ($page['title'] !== '')?$page['title']:"")); ?></title>
     <meta name="keywords" content="<?php echo htmlentities((isset($page['keywords']) && ($page['keywords'] !== '')?$page['keywords']:'')); ?>">
     <meta name="description" content="<?php echo htmlentities((isset($page['description']) && ($page['description'] !== '')?$page['description']:'')); ?>">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 </head>
 
 <body>
@@ -27,7 +28,7 @@
 <?php endif; ?> 
 <div class="container">
     <div class="row">
-        <div class="col-6 my-3">
+        <div class="col-8 my-3">
             <form id="update">
                 <div class="form-group">
                     <p>当前配置</p>
@@ -44,8 +45,6 @@
                     <a href="<?php echo url('_site_save_all'); ?>" class="btn btn-sm btn-dark" id="send">保存</a>
                 </div>
             </form>
-        </div>
-        <div class="col-6">
             <form id="create">
                 <div class="form-group">
                     <p>调整配置</p>
@@ -75,12 +74,10 @@
                 </div>
             </form>
         </div>
-        <div class="col-12">
+        <div class="col-4 mt-5">
             <div class="card">
-                <div class="card-header">
-                    <p class="card-title mb-0">WEB配置信息</p>
-                </div>
                 <div class="card-body">
+                    <p class="card-title mb-0">服务器信息</p>
                     <p class="card-text">服务系统：
                         <code><?php echo htmlentities(PHP_OS); ?></code>
                     </p>
@@ -105,6 +102,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -137,14 +135,14 @@
         nodeCreate.querySelector('input[name="name"]').addEventListener('blur', function (event) {
             $.post("<?php echo url('_site_find'); ?>", { name: event.target.value }, function (resp) {
                 if (resp.data) {
-                    nodeCreate.querySelector('input[name=id]').value=resp.data.id;
-                    nodeCreate.querySelector('input[name=cname]').value=resp.data.cname;
-                    nodeCreate.querySelector('input[name=content]').value=resp.data.content;
+                    nodeCreate.querySelector('input[name=id]').value = resp.data.id;
+                    nodeCreate.querySelector('input[name=cname]').value = resp.data.cname;
+                    nodeCreate.querySelector('input[name=content]').value = resp.data.content;
                     nodeCreate.querySelector('a#send').text = "更新";
                     nodeCreate.querySelector('a#delete').style = "display:inline-block";
                 } else {
-                    nodeCreate.querySelector('input[name=cname]').value='';
-                    nodeCreate.querySelector('input[name=content]').value='';
+                    nodeCreate.querySelector('input[name=cname]').value = '';
+                    nodeCreate.querySelector('input[name=content]').value = '';
                     nodeCreate.querySelector('a#send').text = "新增";
                     nodeCreate.querySelector('a#delete').style = "display:none";
                 }

@@ -40,7 +40,7 @@ class Category extends Base
     public function save(Request $request, CategoryModle $cats)
     {
         $data = $request->param();
-        $valid= $this->validate($data, '\\app\\common\\validate\\Category.save');
+        $valid= Unity::valid($data, 'CategorySave');
         if ($valid !==true) {
             return Unity::error($valid);
         }
@@ -102,12 +102,11 @@ class Category extends Base
     public function update(Request $request, CategoryModle $cats)
     {
         $data = $request->param();
-        $valid = $this->validate($data, '\\app\\common\\validate\\Category.update');
+        $valid = Unity::valid($data, 'CategoryUpdate');
         if ($valid !==true) {
             return Unity::error($valid);
         }
         $result = $cats->allowField(true)->update($data);
-        
         return Unity::success('已更新', ['_category',['parent'=>$result->parent]]);
     }
 

@@ -1,7 +1,7 @@
 {extend name="layout"/} {block name="warp"}
 <div class="container">
     <div class="row">
-        <div class="col-6 my-3">
+        <div class="col-8 my-3">
             <form id="update">
                 <div class="form-group">
                     <p>当前配置</p>
@@ -18,8 +18,6 @@
                     <a href="{:url('_site_save_all')}" class="btn btn-sm btn-dark" id="send">保存</a>
                 </div>
             </form>
-        </div>
-        <div class="col-6">
             <form id="create">
                 <div class="form-group">
                     <p>调整配置</p>
@@ -49,12 +47,10 @@
                 </div>
             </form>
         </div>
-        <div class="col-12">
+        <div class="col-4 mt-5">
             <div class="card">
-                <div class="card-header">
-                    <p class="card-title mb-0">WEB配置信息</p>
-                </div>
                 <div class="card-body">
+                    <p class="card-title mb-0">服务器信息</p>
                     <p class="card-text">服务系统：
                         <code>{$Think.PHP_OS}</code>
                     </p>
@@ -79,6 +75,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -97,14 +94,14 @@
         nodeCreate.querySelector('input[name="name"]').addEventListener('blur', function (event) {
             $.post("{:url('_site_find')}", { name: event.target.value }, function (resp) {
                 if (resp.data) {
-                    nodeCreate.querySelector('input[name=id]').value=resp.data.id;
-                    nodeCreate.querySelector('input[name=cname]').value=resp.data.cname;
-                    nodeCreate.querySelector('input[name=content]').value=resp.data.content;
+                    nodeCreate.querySelector('input[name=id]').value = resp.data.id;
+                    nodeCreate.querySelector('input[name=cname]').value = resp.data.cname;
+                    nodeCreate.querySelector('input[name=content]').value = resp.data.content;
                     nodeCreate.querySelector('a#send').text = "更新";
                     nodeCreate.querySelector('a#delete').style = "display:inline-block";
                 } else {
-                    nodeCreate.querySelector('input[name=cname]').value='';
-                    nodeCreate.querySelector('input[name=content]').value='';
+                    nodeCreate.querySelector('input[name=cname]').value = '';
+                    nodeCreate.querySelector('input[name=content]').value = '';
                     nodeCreate.querySelector('a#send').text = "新增";
                     nodeCreate.querySelector('a#delete').style = "display:none";
                 }

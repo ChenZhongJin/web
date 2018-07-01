@@ -167,14 +167,35 @@ class Valid extends Validate
             ->rename('content','配置值')
             ->rename('id','获取索引失败！索引');
     }
-    // 栏目分类
-    public function sceneUpdate()
+    // 栏目 更新
+    public function sceneCategoryUpdate()
     {
-        return $this->only(['cname','path','parent','id']);
+        return $this->only(['cname','path','parent'])
+            ->append('cname','require|max:100')
+            ->append('path','require|max:100|alphaDash|exclude|unique:qiyun_category')
+            ->append('parent','require|number')
+            ->append('view','alpha|max:20')
+            ->append('type_view','alpha|max:20')
+            ->rename('cname','栏目名称')
+            ->rename('path','路径')
+            ->rename('parent','父级索引')
+            ->rename('view','栏目模板')
+            ->rename('type_view','内容页模板');
     }
-    public function sceneSave()
+    // 栏目 新增
+    public function sceneCategorySave()
     {
-        return $this->only(['cname','path','parent']);
+        return $this->only(['cname','path','parent'])
+            ->append('cname','require|max:100')
+            ->append('path','require|max:100|alphaDash|exclude|unique:qiyun_category')
+            ->append('parent','require|number')
+            ->append('view','alpha|max:20')
+            ->append('type_view','alpha|max:20')
+            ->rename('cname','栏目名称')
+            ->rename('path','路径')
+            ->rename('parent','父级索引')
+            ->rename('view','栏目模板')
+            ->rename('type_view','内容页模板');
     }
     // 用户
     public function sceneUserLogin()
