@@ -1,0 +1,11 @@
+#root
+/.vscode/
+/confing/database.php
+/runtime/
+/vendor/
+phpcs.xml
+*.log
+.env
+#dir
+thinkphp
+public

@@ -1,0 +1,36 @@
+{extend name="layout"/} {block name="warp"}
+<div class="container">
+    <div class="row">
+        <div class="col-12 py-2">
+            <a href="{:url('_productEdit')}" class="btn btn-sm btn-dark rounded-0">添加产品</a>
+        </div>
+        <div class="col-12">
+            <div class="card-columns">
+                {foreach $list as $item}
+                <div class="card">
+                    <img class="card-img-top rounded-0" src="{if count($item.preview)>0}{$item.preview[0]['src']}{/if}">
+                    <div class="card-body">
+                        <p>{$item.name} - {$item.model}</p>
+                        <p class="text-muted text-small">{$item->category->cname}</p>
+                        <a href="{:url('_productEdit',['id'=>$item.id])}" class="btn btn-sm btn-dark rounded-0">修改</a>
+                        <a href="{:url('_product_delete',['id'=>$item.id])}" class="btn btn-sm btn-outline-danger rounded-0" id="delete">删除</a>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+            {$page|raw}
+        </div>
+    </div>
+</div>
+
+{/block}{block name="warpJS"}
+<script>
+    (function () {
+        document.querySelectorAll('a#delete').forEach(function (element) {
+            element.addEventListener('click', function (event) {
+                event.preventDefault();
+                ajax(event.target.href);
+            })
+        })
+    })()
+</script> {/block}
