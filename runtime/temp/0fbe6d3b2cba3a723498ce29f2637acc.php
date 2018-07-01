@@ -1,17 +1,18 @@
-<?php /*a:4:{s:54:"C:\site\cms\application\manager\view\article\edit.html";i:1530035274;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530034941;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530133980;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530035442;}*/ ?>
+<?php /*a:5:{s:54:"C:\site\cms\application\manager\view\article\edit.html";i:1530355502;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530281994;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;s:48:"C:\site\cms\application\manager\view\editor.html";i:1529937295;}*/ ?>
 <!doctype html>
 <html lang="zh_CN">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" /> <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" /><link rel="stylesheet" type="text/css" href="/static/css/common.css" />
     <title><?php echo htmlentities((isset($page['title']) && ($page['title'] !== '')?$page['title']:"")); ?></title>
     <meta name="keywords" content="<?php echo htmlentities((isset($page['keywords']) && ($page['keywords'] !== '')?$page['keywords']:'')); ?>">
     <meta name="description" content="<?php echo htmlentities((isset($page['description']) && ($page['description'] !== '')?$page['description']:'')); ?>">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand navbar-light bg-light">
+    <?php if(app('session')->get('user')): ?>
+<nav class="navbar navbar-expand navbar-light bg-light">
     <div class="nav navbar-nav mr-auto">
         <a class="nav-item nav-link" href="<?php echo url('_console'); ?>">站点</a>
         <a class="nav-item nav-link" href="<?php echo url('_article'); ?>">文章</a>
@@ -22,7 +23,8 @@
     <div class="nav navbar-nav">
         <a class="nav-item nav-link" href="<?php echo url('logout'); ?>" id="logout"><?php echo htmlentities(app('session')->get('user.name')); ?></a>
     </div>
-</nav> 
+</nav>
+<?php endif; ?> 
 <div class="container">
     <div class="row">
         <div class="w-100">
@@ -30,14 +32,14 @@
                 <div class="form-group">
                     <?php echo token(); ?>
                     <input type="hidden" name="id" value="<?php echo htmlentities($data['id']); ?>">
-                    <label for="title">文章标题</label>
+                    <small>文章标题</small>
                     <input type="text" name="title" class="form-control" value="<?php echo htmlentities($data['title']); ?>">
                 </div>
                 <div class="form-group">
                     <label for="category">所属分类</label>
-                    <select class="form-control" id="category">
+                    <select class="form-control" id="category" name="category_id">
                         <?php foreach($categorys as $cat): ?>
-                        <option value="<?php echo htmlentities($cat['id']); ?>" <?php if($data['category_id'] == $cat['id']): ?>selected<?php endif; ?>><?php echo htmlentities($cat['cname']); ?></option>
+                        <option value="<?php echo htmlentities($cat['id']); ?>" <?php if($data['category_id']==$cat['id']): ?>selected<?php endif; ?>><?php echo htmlentities($cat['cname']); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -64,46 +66,51 @@
             </form>
         </div>
     </div>
-</div>  <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script> <script type="text/javascript" src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</div>  <script type="text/javascript" src="/static/js/jquery.min.js"></script> <script type="text/javascript" src="/static/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/static/js/bundle.js"></script> <footer class="w-100 mt-3">
     <div class="text-center">
         <p class="text-muted text-small">古都企业网站系统 version:<?php echo htmlentities($APP['version']); ?> .Develop Mark:<?php echo htmlentities($APP['devMark']); ?></p>
-        <p class="text-muted text-small"><a href="https://github.com/ChenZhongJin/web" class="text-muted">GitHub 分支dev_s</a></p>
+        <p class="text-muted text-small">
+            <a href="https://github.com/ChenZhongJin/web" class="text-muted">GitHub 分支dev_s</a>
+        </p>
     </div>
-</footer> 
-<script src="/static/tinymce/tinymce.min.js"></script>
+</footer>
+<?php if(app('session')->get('user')): ?>
 <script>
-    tinymce.init({
-        selector: 'textarea#edit',
-        height: 300,
-        menubar: false,
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor textcolor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste code help wordcount'
-        ],
-        toolbar: 'insert | code | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-        language: 'zh_CN',
-        relative_urls: false,
-        image_dimensions: false,
-        images_upload_url: '<?php echo url("_unity_upimg"); ?>',
-    });
-    document.querySelector('form#article a#send').addEventListener('click', function (event) {
-        event.preventDefault();
-        var data = jQuery('form#article').serializeArray();
-        data.push({name:'content',value: tinymce.get('edit').getContent()});
-        data.push({name:'content_text',value: tinymce.get('edit').getContent({format:'text'})});
-        document.querySelector('form#article').querySelector('select').querySelectorAll('option').forEach(function(k){
-            if(k.selected){data.push({name:'category_id',value:k.value});return;}
+    (function () {
+        document.querySelector('a#logout').addEventListener('click', function (event) { event.preventDefault(); ajax(event.target.href) })
+    })()
+</script> <?php endif; ?>  <script src="/static/tinymce/tinymce.min.js"></script>
+<script>
+    (function () {
+        tinymce.init({
+            selector: 'textarea#edit',
+            height: 300,
+            menubar: false,
+            plugins: [
+                'advlist autolink lists link image charmap print preview anchor textcolor',
+                'searchreplace visualblocks code fullscreen',
+                'insertdatetime media table contextmenu paste code help wordcount'
+            ],
+            toolbar: 'insert | code | undo redo |  formatselect | bold italic backcolor  | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+            language: 'zh_CN',
+            relative_urls: false,
+            image_dimensions: false,
+            images_upload_url: '<?php echo url("_unity_upimg"); ?>',
+        });
+    })()
+</script>
+<script>
+    (function () {
+        var form = document.querySelector('form#article');
+        form.querySelector('a#send').addEventListener('click', function (event) {
+            event.preventDefault();
+            var data = jQuery(form).serializeArray();
+            data.push({ name: 'content', value: tinymce.get('edit').getContent() });
+            ajax(event.target.href, data);
         })
-        ajax(event.target.href, data);
-    })
-</script>  
-    <script>
-        (function () {
-            document.querySelector('a#logout').addEventListener('click', function (event) { event.preventDefault(); ajax(event.target.href) })
-        })()
-    </script> 
+    })()
+</script> 
 </body>
 
 </html>

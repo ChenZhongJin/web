@@ -26,7 +26,7 @@ class Product extends Model
     {
         return json_encode($preview);
     }
-    protected function category()
+    public function category()
     {
         return $this->hasOne('Category','id','category_id');
     }

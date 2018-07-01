@@ -1,5 +1,7 @@
 <?php 
 //根据 Annotation 自动生成的路由规则
+Route::get('/article/:id','home/Home/article')->name('article');
+Route::get('/product/:id','home/Home/product')->name('product');
 Route::get('/console/article/edit/[:id]','manager/Article/edit')->name('_articleEdit');
 Route::post('/console/article/save','manager/Article/save')->name('_article_save');
 Route::post('/console/article/update','manager/Article/update')->name('_article_update');
@@ -11,9 +13,8 @@ Route::get('/console/category/edit/:parent/:id','manager/Category/edit')->name('
 Route::post('/console/category/update','manager/Category/update')->name('_category_update');
 Route::post('/console/category/delete/:id','manager/Category/delete')->name('_category_delete');
 Route::get('/console','manager/Console/index')->name('_console');
-Route::post('/console/site/save','manager/Console/siteSaveAll')->name('_site_save');
-Route::post('/console/site/update','manager/Console/siteUpdate')->name('_site_update');
-Route::post('/console/site/create','manager/Console/websiteCreate')->name('_site_create');
+Route::post('/console/site/saveAll','manager/Console/siteSaveAll')->name('_site_save_all');
+Route::post('/console/site/save','manager/Console/siteSave')->name('_site_save');
 Route::post('/console/site/find','manager/Console/siteFind')->name('_site_find');
 Route::post('/console/site/delete','manager/Console/siteDelete')->name('_site_delete');
 Route::get('/login','manager/Login/index')->name('login_panel');
@@ -24,6 +25,15 @@ Route::post('/console/product/save','manager/Product/save')->name('_product_save
 Route::get('/console/product/[:id]','manager/Product/edit')->name('_productEdit');
 Route::post('/console/product/update','manager/Product/update')->name('_product_update');
 Route::get('/console/product/listimg','manager/Product/listImg')->name('_productListImg');
-Route::get('/console/product/listtxt','manager/Product/listTxt')->name('_productListTxt');
 Route::post('/console/product/delete/:id','manager/Product/delete')->name('_product_delete');
 Route::get('/console/theme','manager/Theme/index')->name('_theme');
+Route::post('/console/theme/active/:themeName','manager/Theme/active')->name('_theme_active');
+Route::get('/console/theme/list/:themeName/[:dir]','manager/Theme/list')->name('_themeList');
+Route::post('/console/theme/create/dir','manager/Theme/createDir')->name('_theme_create_dir');
+Route::post('/console/theme/create/file','manager/Theme/createFile')->name('_theme_create_file');
+Route::post('/console/theme/remove/:themeName/:dirName/[:fileName]','manager/Theme/remove')->name('_themeRemove');
+Route::post('/console/theme/rm/:themeName/:fileName','manager/Theme/rmFile')->name('_themeRm');
+Route::rule('/console/theme/edit/:themeName/:dirName/:fileName','manager/Theme/edit')->name('_themeEdit');
+Route::rule('/console/theme/edit/:themeName/:fileName','manager/Theme/editRoot')->name('_themeEditRoot');
+Route::post('/console/theme/save/:themeName/:dirName/:fileName','manager/Theme/save')->name('_theme_save');
+Route::post('/console/theme/save/:themeName/:fileName','manager/Theme/saveRoot')->name('_theme_save_root');

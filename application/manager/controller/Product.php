@@ -13,28 +13,10 @@ use Symfony\Component\DomCrawler\Crawler;
 class Product extends Base
 {
     private $categoryType = 2;
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
-    public function index()
-    {
-        //
-    }
+
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * 保存新建的资源
+     * 新增产品
      *
      * @param  \think\Request  $request
      * @return \think\Response
@@ -43,7 +25,7 @@ class Product extends Base
     public function save(Request $request, ProductModel $product)
     {
         $data = $request->param();
-        $valid= $this->validate($data, '\\app\\common\\Valid.ProductCreate');
+        $valid= Unity::valid($data, 'ProductCreate');
         if ($valid !==true) {
             return Unity::error($valid);
         }
@@ -51,19 +33,9 @@ class Product extends Base
         return Unity::success('已新增', '_productListImg');
     }
 
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
-    }
 
     /**
-     * 显示编辑资源表单页.
+     * 编辑页面
      *
      * @param  int  $id
      * @return \think\Response
@@ -79,7 +51,7 @@ class Product extends Base
     }
 
     /**
-     * 保存更新的资源
+     * 更新
      *
      * @param  \think\Request  $request
      * @route('/console/product/update','post')->name('_product_update')
@@ -95,7 +67,7 @@ class Product extends Base
         return Unity::success('已更新', '_productListImg');
     }
     /**
-     * 图片列表
+     * 产品列表
      *
      * @return void
      * @route('/console/product/listimg','get')->name('_productListImg')
@@ -110,18 +82,6 @@ class Product extends Base
         $this->assign('list', $list);
         return $this->fetch();
     }
-    /**
-     * 文本列表
-     *
-     * @return void
-     * @route('/console/product/listtxt','get')->name('_productListTxt')
-     */
-    public function listTxt()
-    {
-        $list = $product->all();
-        $this->assign('list', $list);
-        return $this->fetch();
-    }
 
     /**
      * 删除指定资源
@@ -133,7 +93,10 @@ class Product extends Base
     public function delete($id, ProductModel $product)
     {
         $item = $product->get($id);
-        $item->delete();
-        return Unity::success($item->name.'已删除', '_productListImg');
+        if(!empty($item)){
+            $item->delete();
+            return Unity::success($item->name.'已删除', '_productListImg');
+        }
+        return Unity::error('删除失败','_productListImg');
     }
 }

@@ -2,7 +2,6 @@
 
 namespace app\manager\controller;
 
-use think\Controller;
 use think\Request;
 use app\common\model\Site as SiteModel;
 use app\common\unity\Unity;
@@ -24,7 +23,8 @@ class Console extends Base
 
     /**
      * 批量更新站点配置信息
-     * @route('/console/site/save','post')->name('_site_save')
+     * 
+     * @route('/console/site/saveAll','post')->name('_site_save_all')
      */
     public function siteSaveAll(Request $request ,SiteModel $site)
     {
@@ -36,43 +36,29 @@ class Console extends Base
             ];
         }
         $resule = $site->saveAll($data);
-        return $this->success('完成操作','_console');
-    }
-
-    /**
-     * 更新配置信息
-     * 
-     * @route('/console/site/update','post')->name('_site_update')
-     */
-    public function siteUpdate(Request $request ,SiteModel $site)
-    {
-        $data = $request->only(['id' ,'name' ,'cname' ,'content']);
-        $valid = Unity::valid($data ,'SiteUpdate');
-        if ($valid !==true) {
-            return Unity::error($valid);
-        }
-        $site->allowField(true)->isUpdate(true)->save($data);
         return Unity::success('完成操作','_console');
     }
 
     /**
-     * 新增站点配置
+     * 1条数据新增和更新
      *
-     * @route('/console/site/create','post')->name('_site_create')
+     * @route('/console/site/save','post')->name('_site_save')
      */
-    public function websiteCreate(Request $request,SiteModel $site)
+    public function siteSave(Request $request,SiteModel $site)
     {
         $data = $request->param();
-        $valid = Unity::valid($data ,'SiteCreate');
+        if(empty($data['id'])){
+            // 新增
+            $valid = Unity::valid($data,'SiteSave');
+        } else {
+            // 更新
+            $valid = Unity::valid($data ,'SiteUpdate');
+            $site  = $site->get($data['id']);
+        }
         if ($valid !==true) {
             return Unity::error($valid);
         }
-        if ($data['id']) {
-            $site->allowField(true)->update($data);
-        }else{
-            $site->allowField(true)->save($data);
-        }
-
+        $site->allowField(true)->save($data);
         return Unity::success('完成操作','_console');
     }
     /**
@@ -85,10 +71,8 @@ class Console extends Base
     public function siteFind(Request $request,SiteModel $site)
     {
         $data = $request->only(['name']);
-        $result = $site->get($data);
-        if (!empty($result)) {
-            return $result;
-        }
+        $result = $site->where($data)->find();
+        return $result?Unity::success(null,null,['data'=>$result]):Unity::error();
     }
 
     /**
@@ -101,8 +85,11 @@ class Console extends Base
      */
     public function siteDelete(Request $request,SiteModel $site)
     {
-        $id = $request->param('id');
-        $site->get($id)->delete();
-        return Unity::success('完成操作','_console');
+        $data = $request->param();
+        if(!empty($data['id'])){
+            $site->get($data['id'])->delete();
+            return Unity::success('完成操作','_console');
+        }
+        return Unity::error('获取数据错误！删除失败');
     }
 }

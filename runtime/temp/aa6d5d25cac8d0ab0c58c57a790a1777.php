@@ -1,17 +1,18 @@
-<?php /*a:4:{s:55:"C:\site\cms\application\manager\view\console\index.html";i:1530133900;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530034941;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530133980;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530035442;}*/ ?>
+<?php /*a:4:{s:55:"C:\site\cms\application\manager\view\console\index.html";i:1530354654;s:48:"C:\site\cms\application\manager\view\layout.html";i:1530281994;s:45:"C:\site\cms\application\manager\view\nav.html";i:1530281968;s:48:"C:\site\cms\application\manager\view\footer.html";i:1530281986;}*/ ?>
 <!doctype html>
 <html lang="zh_CN">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" /> <link rel="stylesheet" type="text/css" href="/static/css/common.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" /><link rel="stylesheet" type="text/css" href="/static/css/common.css" />
     <title><?php echo htmlentities((isset($page['title']) && ($page['title'] !== '')?$page['title']:"")); ?></title>
     <meta name="keywords" content="<?php echo htmlentities((isset($page['keywords']) && ($page['keywords'] !== '')?$page['keywords']:'')); ?>">
     <meta name="description" content="<?php echo htmlentities((isset($page['description']) && ($page['description'] !== '')?$page['description']:'')); ?>">
 </head>
 
 <body>
-    <nav class="navbar navbar-expand navbar-light bg-light">
+    <?php if(app('session')->get('user')): ?>
+<nav class="navbar navbar-expand navbar-light bg-light">
     <div class="nav navbar-nav mr-auto">
         <a class="nav-item nav-link" href="<?php echo url('_console'); ?>">站点</a>
         <a class="nav-item nav-link" href="<?php echo url('_article'); ?>">文章</a>
@@ -22,7 +23,8 @@
     <div class="nav navbar-nav">
         <a class="nav-item nav-link" href="<?php echo url('logout'); ?>" id="logout"><?php echo htmlentities(app('session')->get('user.name')); ?></a>
     </div>
-</nav> 
+</nav>
+<?php endif; ?> 
 <div class="container">
     <div class="row">
         <div class="col-6 my-3">
@@ -39,7 +41,7 @@
                 </div>
                 <?php endforeach; ?>
                 <div class="form-group">
-                    <a href="<?php echo url('_site_save'); ?>" class="btn btn-sm btn-dark" id="send">保存</a>
+                    <a href="<?php echo url('_site_save_all'); ?>" class="btn btn-sm btn-dark" id="send">保存</a>
                 </div>
             </form>
         </div>
@@ -50,26 +52,26 @@
                     <input type="hidden" name="id">
                 </div>
                 <div class="form-group">
-                    <small id="helpId" class="text-muted">
+                    <small class="text-muted">
                         <code>调用名称</code>
                     </small>
                     <input type="text" name="name" class="form-control" placeholder="cc_phone">
                 </div>
                 <div class="form-group">
-                    <small id="helpId" class="text-muted">
-                        <code>描述</code>
+                    <small class="text-muted">
+                        配置描述
                     </small>
                     <input type="text" name="cname" class="form-control" placeholder="cc的手机号">
                 </div>
                 <div class="form-group">
-                    <small id="helpId" class="text-muted">
-                        <code>内容</code>
+                    <small class="text-muted">
+                        配置值
                     </small>
                     <input type="text" name="content" class="form-control" placeholder="13011112222">
                 </div>
                 <div class="form-group">
-                    <a href="javascript:;" class="btn btn-sm btn-dark" id="send">新增</a>
-                    <a href="javascript:;" class="btn btn-sm btn-danger" id="delete" style="display:none">删除</a>
+                    <a href="<?php echo url('_site_save'); ?>" class="btn btn-sm btn-dark" id="send">新增</a>
+                    <a href="<?php echo url('_site_delete'); ?>" class="btn btn-sm btn-danger" id="delete" style="display:none">删除</a>
                 </div>
             </form>
         </div>
@@ -106,52 +108,60 @@
     </div>
 </div>
 
- <script type="text/javascript" src="/node_modules/jquery/dist/jquery.min.js"></script> <script type="text/javascript" src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+ <script type="text/javascript" src="/static/js/jquery.min.js"></script> <script type="text/javascript" src="/static/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="/static/js/bundle.js"></script> <footer class="w-100 mt-3">
     <div class="text-center">
         <p class="text-muted text-small">古都企业网站系统 version:<?php echo htmlentities($APP['version']); ?> .Develop Mark:<?php echo htmlentities($APP['devMark']); ?></p>
-        <p class="text-muted text-small"><a href="https://github.com/ChenZhongJin/web" class="text-muted">GitHub 分支dev_s</a></p>
+        <p class="text-muted text-small">
+            <a href="https://github.com/ChenZhongJin/web" class="text-muted">GitHub 分支dev_s</a>
+        </p>
     </div>
-</footer> 
+</footer>
+<?php if(app('session')->get('user')): ?>
 <script>
-    document.querySelector('form#update a#send').addEventListener('click', function (event) {
-        event.preventDefault();
-        ajax(event.target.href, jQuery('form#update').serialize());
-    });
-    // 查找
-    document.querySelector('form#create input[name="name"]').addEventListener('blur', function () {
-        $.post("<?php echo url('_site_find'); ?>", { name: this.value }, function (resp) {
-            if (resp) {
-                document.querySelectorAll('form#create input').forEach(function (el) {
-                    if (el.getAttribute('name') === 'name') return;
-                    el.value = resp[el.getAttribute('name')] || "";
-                })
-                document.querySelector('form#create a#send').text = "更新";
-                document.querySelector('form#create a#delete').style = "display:inline-block";
-            } else {
-                document.querySelectorAll('form#create input').forEach(function (el) {
-                    if (el.getAttribute('name') === 'name') return;
-                    el.value = "";
-                })
-                document.querySelector('form#create a#send').text = "新增";
-                document.querySelector('form#create a#delete').style = "display:none";
-            }
+    (function () {
+        document.querySelector('a#logout').addEventListener('click', function (event) { event.preventDefault(); ajax(event.target.href) })
+    })()
+</script> <?php endif; ?> 
+<script>
+    (function () {
+        var nodeUpdate = document.querySelector('form#update');
+        var nodeCreate = document.querySelector('form#create');
+        // 配置列表更新
+        nodeUpdate.querySelector('#send').addEventListener('click', function (event) {
+            event.preventDefault();
+            var data = jQuery(nodeUpdate).serialize();
+            ajax(event.target.href, data);
+        });
+        // 查询1条配置
+        nodeCreate.querySelector('input[name="name"]').addEventListener('blur', function (event) {
+            $.post("<?php echo url('_site_find'); ?>", { name: event.target.value }, function (resp) {
+                if (resp.data) {
+                    nodeCreate.querySelector('input[name=id]').value=resp.data.id;
+                    nodeCreate.querySelector('input[name=cname]').value=resp.data.cname;
+                    nodeCreate.querySelector('input[name=content]').value=resp.data.content;
+                    nodeCreate.querySelector('a#send').text = "更新";
+                    nodeCreate.querySelector('a#delete').style = "display:inline-block";
+                } else {
+                    nodeCreate.querySelector('input[name=cname]').value='';
+                    nodeCreate.querySelector('input[name=content]').value='';
+                    nodeCreate.querySelector('a#send').text = "新增";
+                    nodeCreate.querySelector('a#delete').style = "display:none";
+                }
+            })
+        });
+        // 增加或更新配置
+        nodeCreate.querySelector('a#send').addEventListener('click', function (event) {
+            event.preventDefault();
+            ajax(event.target.href, jQuery(nodeCreate).serialize());
         })
-    });
-    // 增加或更新配置
-    document.querySelector('form#create a#send').addEventListener('click', function (element) {
-        ajax("<?php echo url('_site_create'); ?>", jQuery('form#create').serialize());
-    })
-    // 删除1条配置
-    document.querySelector('form#create a#delete').addEventListener('click', function (element) {
-        ajax("<?php echo url('_site_delete'); ?>", jQuery('form#create').serialize());
-    })
-</script>  
-    <script>
-        (function () {
-            document.querySelector('a#logout').addEventListener('click', function (event) { event.preventDefault(); ajax(event.target.href) })
-        })()
-    </script> 
+        // 删除1条配置
+        nodeCreate.querySelector('a#delete').addEventListener('click', function (event) {
+            event.preventDefault();
+            ajax(event.target.href, jQuery(nodeCreate).serialize());
+        })
+    })()
+</script> 
 </body>
 
 </html>

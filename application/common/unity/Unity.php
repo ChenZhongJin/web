@@ -10,7 +10,7 @@ use think\facade\Url;
 class Unity
 {
     const version = '1.07';
-    const devMark = '牙签';
+    const devMark = '带刺的牙签';
     /**
      * 汉字转拼音
      *
@@ -38,7 +38,7 @@ class Unity
                     .$_FILES['file']['error']
                     .']是否上传文件大于'
                     .ini_get('upload_max_filesize');
-            return self::info(0, $msg);
+            return self::error($msg);
         }
         $info = $file->validate([
             'size'=>2*pow(1024, 2) ,
@@ -51,29 +51,8 @@ class Unity
                 'code'    => 1,
                 ]);
         } else {
-            return self::info(0, $file->getError());
+            return self::error($file->getError());
         }
-    }
-
-
-    /**
-     * 封装JSON返回
-     *
-     * @param integer $code 状态码 0:danger 1:success 2:primary 3:info 4:warning 5:dark
-     * @param string $msg
-     * @param think\URL $url
-     * @param array $more
-     * @return void
-     */
-    public static function info($code = 0, $msg = '', $url = null, $more=[])
-    {
-        $response = [
-            'code'  =>$code,
-            'msg'   =>$msg,
-            'url'   =>empty($url)?false:Url::build($url),
-            'wait'  =>3,
-        ];
-        return json(array_merge($response, $more));
     }
 
     /**
@@ -88,15 +67,18 @@ class Unity
     public static function response($code = 0, $msg = '', $url = null, $more=[])
     {
         if (is_array($url)) {
+            // 支持数组
             list($uri,$param) = $url;
             $url = Url::build($uri,$param);
-        } else {
+        } else if(is_string($url)) {
             $url = Url::build($url);
+        } else {
+            $url = null;
         }
         $response = [
             'code'  =>$code,
             'msg'   =>$msg,
-            'url'   =>empty($url)?false:$url,
+            'url'   =>$url,
             'wait'  =>3,
         ];
         return json(array_merge($response, $more));
@@ -140,9 +122,5 @@ class Unity
             return substr($html,$start,$len);
         }
         return $html;
-    }
-    public static function ResponseTemplate()
-    {
-        
     }
 }

@@ -25,23 +25,22 @@ use app\common\model\Article as ArticleModel;
 use app\common\model\Product as ProductModel;
 use app\common\model\Site as SiteModel;
 use think\facade\Config;
+use app\common\unity\Unity;
+use app\common\unity\Theme;
 class Home extends Controller
 {
-    /**
-     * 前端主题文件路径
-     */
-    private     $themePath;
-    public function __construct(\think\App $app = null)
+    public function __construct()
     {
         parent::__construct();
-        $theme = Config::get('theme.theme');
-        $this->themePath = \App::getRootPath() .'template'.DIRECTORY_SEPARATOR.$theme.DIRECTORY_SEPARATOR;
-        // 定义视图目录
-        $this->view->config('view_path',$this->themePath);
+        // 配置主题
+        $theme = new Theme();
+        $themeName = $theme->get('theme');
+        $themePath = $theme->getThemePath($themeName);
+        $this->view->config('view_path',$themePath);
+        // 全局变量 模板内引用
         $site    = new SiteModel();
         $siteMap = $site->map();
-        // 全局
-        $this->assign('site',$siteMap);
+        $this->view->share('site',$siteMap);
     }
     /**
      * 首页
@@ -54,17 +53,23 @@ class Home extends Controller
     /**
      * 文章
      *
+     * @route('/article/:id','get')->name('article')
      */
-    public function article()
+    public function article(ArticleModel $article,$id)
     {
-        return $this->fetch();
+        $data = $article->get($id);
+        $this->assign('data',$data);
+        return $this->fetch($data->category->subtheme);
     }
     /**
      * 产品
+     * @route('/product/:id','get')->name('product')
      */
-    public function product()
+    public function product(ProductModel $product,$id)
     {
-        return $this->fetch();
+        $data = $product->get($id);
+        $this->assign('data',$data);
+        return $this->fetch($data->category->subtheme);
     }
     /**
      * 栏目页
@@ -80,7 +85,6 @@ class Home extends Controller
         $pos && $path=substr($path,0,$pos);
         $cats = new CategoryModel();
         $data = $cats->getByPath($path);
-        
         return $this->fetch();
     }
 }

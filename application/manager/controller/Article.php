@@ -5,17 +5,16 @@ namespace app\manager\controller;
 use think\Controller;
 use think\Request;
 use app\common\model\Article as ArticleModle;
-use app\common\validate\Article as ArticleValidate;
 use app\common\model\Category as CategoryModel;
+use app\common\Valid;
 use think\facade\Session;
-use Sunra\PhpSimple\HtmlDomParser;
+use app\common\unity\Unity;
 
 class Article extends Base
 {
     /**
      * 显示资源列表
-     *
-     * @return \think\Response
+     * 
      * @route('/console/article/edit/[:id]','get')->name('_articleEdit')
      */
     public function edit($id=0,ArticleModle $atc,CategoryModel $cat)
@@ -26,42 +25,21 @@ class Article extends Base
     }
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * 保存新建的资源
      *
      * @param  \think\Request  $request
-     * @return \think\Response
      * @route('/console/article/save','post')->name('_article_save')
      */
     public function save(Request $request ,ArticleModle $atc)
     {
-        $data = $request->param();
-        $valid = $this->validate($data ,'\\app\\common\\Valid.ArticleCreate');
+        $data  = $request->param();
+        $data['user_id'] = Session::get('user.id');
+        $valid = Unity::valid($data ,'ArticleCreate');
         if ($valid !==true) {
-            return $this->error($valid);
+            return Unity::error($valid);
         }
         $atc->allowField(true)->save($data);
-        return $this->success('发布完成','_article');
-    }
-
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function read($id)
-    {
-        //
+        return Unity::success('发布完成','_article');
     }
 
     /**
@@ -69,18 +47,18 @@ class Article extends Base
      *
      * @param  \think\Request  $request
      * @param  int  $id
-     * @return \think\Response
      * @route('/console/article/update','post')->name('_article_update')
      */
     public function update(Request $request ,ArticleModle $atc)
     {
         $data = $request->param();
-        $valid= $this->validate($data,'\\app\\common\\Valid.ArticleUpdate');
+        $data['user_id'] = Session::get('user.id');
+        $valid= Unity::valid($data,'ArticleUpdate');
         if($valid !==true){
-            return $this->error($valid);
+            return Unity::error($valid);
         }
         $atc->allowField(true)->update($data);
-        return $this->success('已更新','_article');
+        return Unity::success('已更新','_article');
     }
 
     /**
@@ -92,8 +70,12 @@ class Article extends Base
      */
     public function delete($id,ArticleModle $atc)
     {
-        $atc->get($id)->delete();
-        return $this->success('文章已删除','_article');
+        $data = $atc->get($id);
+        if($data){
+            $data->delete();
+            return Unity::success('文章已删除','_article');
+        }
+        return Unity::error('删除失败','_article');
     }
 
     /**

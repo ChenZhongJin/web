@@ -6,7 +6,7 @@ use think\Model;
 
 class Site extends Model
 {
-    protected   $table = 'qiyun_website';
+    protected   $table = 'qiyun_site';
     public function map()
     {
         $list = self::all();

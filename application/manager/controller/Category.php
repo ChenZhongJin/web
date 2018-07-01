@@ -27,7 +27,6 @@ class Category extends Base
         $list = $cats->where(['parent'=>$parent])->select();
         $this->assign('parent', $data);
         $this->assign('list',$list);
-        $this->createRouteMap();
         return $this->fetch();
     }
 
@@ -146,5 +145,9 @@ class Category extends Base
         }
         $fs    = new Filesystem();
         $fs->dumpFile(\App::getRoutePath().'category_route_map.php',$rule);
+    }
+    public function __destruct()
+    {
+        $this->createRouteMap();
     }
 }
