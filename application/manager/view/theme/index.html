@@ -4,7 +4,9 @@
         {foreach $list as $themeName=>$themeInfo}
         <div class="col-4">
             <img src="{$themeInfo.preview}" class="figure-img" alt="{$themeInfo.name}">
-            <h4><code>{$themeInfo.name}</code></h4>
+            <h4>
+                <code>{$themeInfo.name}</code>
+            </h4>
             <p>
                 <a href="{:url('_themeList',['themeName'=>$themeName])}" class="btn btn-sm btn-dark rounded-0" id="themeEdit">编辑</a>
                 {if $active == $themeName}{else/}
@@ -17,11 +19,13 @@
 </div>
 {/block} {block name="warpJS"}
 <script>
-(function(){
-    var btn = document.querySelector('a#themeActive');
-    btn.addEventListener('click',function(event){
-        event.preventDefault();
-        ajax(event.target.href,null);
-    })
-})()
+    (function () {
+        var actives = document.querySelectorAll('a#themeActive');
+        actives.forEach(function (element) {
+            element.addEventListener('click', function (event) {
+                event.preventDefault();
+                ajax(event.target.href, null);
+            })
+        });
+    })()
 </script> {/block}

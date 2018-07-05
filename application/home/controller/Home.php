@@ -38,9 +38,19 @@ class Home extends Controller
         $themePath = $theme->getThemePath($themeName);
         $this->view->config('view_path',$themePath);
         // 全局变量 模板内引用
+        // 站点信息
         $site    = new SiteModel();
         $siteMap = $site->map();
         $this->view->share('site',$siteMap);
+        // 栏目
+        $categorys= new CategoryModel();
+        $this->view->share('categorys',$categorys);
+        // 文章
+        $articles = new ArticleModel();
+        $this->view->share('articles',$articles);
+        // 产品
+        $products = new ProductModel();
+        $this->view->share('products',$products);
     }
     /**
      * 首页
@@ -59,7 +69,7 @@ class Home extends Controller
     {
         $data = $article->get($id);
         $this->assign('data',$data);
-        return $this->fetch($data->category->subtheme);
+        return $this->fetch($data->category->type_view);
     }
     /**
      * 产品
@@ -69,7 +79,7 @@ class Home extends Controller
     {
         $data = $product->get($id);
         $this->assign('data',$data);
-        return $this->fetch($data->category->subtheme);
+        return $this->fetch($data->category->type_view);
     }
     /**
      * 栏目页
@@ -85,6 +95,6 @@ class Home extends Controller
         $pos && $path=substr($path,0,$pos);
         $cats = new CategoryModel();
         $data = $cats->getByPath($path);
-        return $this->fetch();
+        return $this->fetch($data->view);
     }
 }

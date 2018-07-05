@@ -27,7 +27,7 @@ class Theme
      * 配置数组
      * @var array
      */
-    public $config = [];
+    private $config = [];
     public function __construct()
     {
         $this->path = App::getRootPath().'template'.DIRECTORY_SEPARATOR;
@@ -46,7 +46,12 @@ class Theme
     public function set($name, $option)
     {
         // 添加或重新设置$name的主题
-        $this->config[$name] = array_merge($this->config[$name], $option);
+        if(!isset($this->config[$name])){
+            $this->config = $option;
+            return;
+        }
+        $this->config[$name] = array_merge($this->config[$name],$option);
+        $this->write();
     }
     /**
      * 删除主题

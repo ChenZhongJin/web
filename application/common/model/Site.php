@@ -11,8 +11,8 @@ class Site extends Model
     {
         $list = self::all();
         $map  = [];
-        foreach ($list as $map) {
-            $map[$map['name']]=$map['content'];
+        foreach ($list as $item) {
+            $map[$item['name']]=$item['content'];
         }
         return $map;
     }

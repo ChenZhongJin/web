@@ -140,7 +140,9 @@ class Category extends Base
         $data  = CategoryModle::all();
         $rule  = '<?php'.PHP_EOL;
         foreach ($data as $item) {
-            $rule .= 'Route::get(\'/' .$item->path .'/[:page]\',\'' .$class .'\');'.PHP_EOL;
+            $path  = strtolower($item->path);
+            $rule .= "Route::get('$path','$class')->name('$path');".PHP_EOL;
+            // $rule .= 'Route::get(\'/' .$item->path .'/[:page]\',\'' .$class .'\')->name(\''.$item->cname.'\');'.PHP_EOL;
         }
         $fs    = new Filesystem();
         $fs->dumpFile(\App::getRoutePath().'category_route_map.php',$rule);

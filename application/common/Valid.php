@@ -148,7 +148,8 @@ class Valid extends Validate
     public function sceneSiteSave()
     {
         return $this->only(['name','cname','content'])
-            ->append('name','unique:qiyun_site')
+            ->remove('name','min')
+            ->append('name','unique:qiyun_site|min:3')
             ->remove('cname','min')
             ->append('cname','min:4')
             ->rename('cname','配置描述')
@@ -161,7 +162,7 @@ class Valid extends Validate
         return $this->only(['id','name','cname','content'])
             ->remove('cname','min')
             ->append('cname','min:4')
-            ->append('name','unique:qiyun_site')
+            ->append('name','unique:qiyun_site|min:3')
             ->rename('cname','配置描述')
             ->rename('name','调用名称')
             ->rename('content','配置值')

@@ -26,6 +26,17 @@ class Product extends Model
     {
         return json_encode($preview);
     }
+    public function getPicAttr($n,$data)
+    {
+        if(count($this->preview)>0) {
+            return $this->preview[0];
+        }
+        return ['src','alt'];
+    }
+    public function getUrlAttr($n,$data)
+    {
+        return url('product',['id'=>$this->id]);
+    }
     public function category()
     {
         return $this->hasOne('Category','id','category_id');

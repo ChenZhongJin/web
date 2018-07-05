@@ -50,6 +50,10 @@
                 <div class="col-6" id="preview_show">
                 </div>
                 <div class="col-12 mb-2">
+                    <small>产品特点</small>
+                    <textarea id="edit-trait" class="form-control">{$data.trait}</textarea>
+                </div>
+                <div class="col-12 mb-2">
                     <small>产品页面内容</small>
                     <textarea id="edit" class="form-control">{$data.content}</textarea>
                 </div>
@@ -86,6 +90,9 @@
 <script src="/static/axios.min.js"></script>
 <script>
     (function () {
+        // 编辑器-产品特点
+        tinymce.init({selector:'textarea#edit-trait',height: 300,
+            menubar: false,plugins: ['code','lists'], toolbar: 'code bullist numlist removeformat'});
         // 注册预览事件
         function eventLister(element) {
             // 预览事件
@@ -149,6 +156,7 @@
             event.preventDefault();
             var data = jQuery('form#product').serializeArray();
             data.push({name:'content',value: tinymce.get('edit').getContent()});
+            data.push({name:'trait',value:tinymce.get('edit-trait').getContent()});
             ajax(event.target.href,data);
         })
     })()
