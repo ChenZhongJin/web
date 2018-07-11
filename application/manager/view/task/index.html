@@ -1,0 +1,85 @@
+{extend name="layout"} {block name="warp"}
+<div class="container pt-3">
+    <div class="row">
+        <div class="col-6">
+            <form id="taskCollect">
+                <div class="form-group">
+                    <small>采集</small>
+                </div>
+                <div class="form-group">
+                    <small>列表地址</small>
+                    <input type="text" name="list_page" class="form-control">
+                </div>
+                <div class="form-group">
+                    <small>匹配规则</small>
+                    <div class="input-group">
+                        <input type="text" name="list_reg" class="form-control">
+                        <div class="input-group-append">
+                            <a href="{:url('_task_collect',['action'=>1])}" class="btn btn-primary">测试</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <small>标题规则</small>
+                    <div class="input-group">
+                        <input type="text" name="title_reg" class="form-control">
+                        <div class="input-group-append">
+                            <a href="{:url('_task_collect',['action'=>2])}" class="btn btn-primary">测试</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <small>内容规则</small>
+                    <div class="input-group">
+                        <input type="text" name="content_reg" class="form-control">
+                        <div class="input-group-append">
+                            <a href="{:url('_task_collect',['action'=>3])}" class="btn btn-primary">测试</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <small>替换规则</small>
+                    <div class="input-group">
+                        <input type="text" name="replace_reg" class="form-control">
+                        <div class="input-group-append">
+                            <a href="{:url('_task_collect',['action'=>4])}" class="btn btn-primary">测试</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <a href="{:url('_task_collect',['action'=>5])}" id="send" class="btn btn-dark btn-sm rounded-0">保存</a>
+                </div>
+            </form>
+        </div>
+        <div class="col-6">
+            <small>预览</small>
+            <div class="previewCollect"></div>
+        </div>
+    </div>
+</div>
+<pre>
+    1.列表页地址
+    2.过滤出要采集的地址
+    3.与库中最后10条比对第1条地址
+    4.没有重复就执行采集任务，有重复则放弃
+    5.采集新地址
+    6.过滤出页面标题
+    7.过滤出页面主体
+    8.保存所有远程图片到本地
+    9.入库
+</pre> {/block} {block name="warpJS"}
+<script>
+    (function () {
+        var preview = document.querySelector('div.previewCollect');
+        var fm = document.querySelector('form#taskCollect');
+        var send = fm.querySelector('a#send');
+
+        fm.querySelectorAll('a').forEach(function(element){
+            element.addEventListener('click',function(event){
+                event.preventDefault();
+                var data = jQuery(fm).serialize();
+                ajax(event.target.href,data);
+            })
+        })
+    })()
+</script> {/block}

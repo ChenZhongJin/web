@@ -1355,7 +1355,7 @@ class Validate
             $session->delete($rule); // 验证完成销毁session
             return true;
         }
-
+        
         // 开启TOKEN重置
         $session->delete($rule);
 

@@ -2,8 +2,8 @@
 
 namespace app\common;
 
+use think\facade\Session;
 use think\Validate;
-
 class Valid extends Validate
 {
     /**
@@ -13,69 +13,17 @@ class Valid extends Validate
      * @var array
      */
     protected $rule = [
-        // 常用字段
-        'id'                         =>  'require|number',
-        'name'                       =>  'require|min:5|max:200|alphaDash',
-        'cname'                      =>  'require|min:5|max:20',
-        'path'                       =>  'require|alphaDash|exclude',
-        'parent'                     =>  'require|number',
-        
-        // 用户相关
-        // 'name|用户名'             =>  'require|min:5|max:20|alphaDash',
-        'password'                   =>  'require|min:5|max:20|alphaDash',
-        'repassword'                 =>  'require|confirm:password',
-        'code'                       =>  'require|captcha',
-        
-        // 页面信息
-        'title'                      =>  'require|max:200',
-        'keywords'                   =>  'max:200',
-        'description'                =>  'max:200',
-        'content'                    =>  'max:5000',
-        'category_id'                =>  'require|number',
-        'user_id'                    =>  'require|number',
-        
-        // 产品相关
-        'model'                      =>  'require|max:200',
-        'serial_number'              =>  'require|max:200',
-        'preview'                    =>  'require|arrayLength:500',
-        // 工具类
-        'token'                      =>  'require|token',
-        'hash'                       =>  'require|token:hash',
-        'captcha'                    =>  'require|captcha',
+        // alphaDash alpha confirm:password captcha token
+        'captcha'       =>  'require|captcha',
     ];
     protected $field = [
-        'token'     =>  '令牌',
-        'hash'      =>  '令牌—散列',
-        'captcha'   =>  '验证码',
-        'id'        =>  '索引',
-        'name'      =>  '名称',
-        'cname'     =>  '别名',
-        'path'      =>  '路径',
-        'parent'    =>  '上级索引',
-        'password'  =>  '密码',
-        'repassword'=>  '校验密码',
-        'code'      =>  '验证码',
-        'title'     =>  '页面标题',
-        'keywords'  =>  '页面关键字',
-        'description'   =>  '页面描述',
-        'content'       =>  '页面主体内容',
-        'category_id'   =>  '栏目索引',
-        'user_id'       =>  '用户索引',
-        'model'         =>  '产品型号',
-        'serial_number' =>  '产品序列号',
-        'priview'       =>  '预览图',
+        'captcha'       =>  '验证码'
     ];
-    /**
-     * 数组长度限制
-     */
-    protected function arrayLength($v, $rule, $data)
-    {
-        return strlen(json_encode($v))<$rule?true:'预览图片太多，删掉2张试试？';
-    }
+    
     /**
      * 排除特定字符
      */
-    public function exclude($data, $rule)
+    protected function exclude($data, $rule)
     {
         if(empty($rule)){
             $rule = ['console','article','product'];
@@ -98,138 +46,181 @@ class Valid extends Validate
         }
         return $this;
     }
-    public function sceneTest()
-    {
-        return $this->only(['name'])
-        ->append('name', 'require|min:5');
-    }
     // 文章 更新
     public function sceneArticleUpdate()
     {
-        return $this->only(['id','title','keywords','description','content','category_id','user_id'])
-            ->append('title','token')
+        return $this->only(['id'])
+            ->append('id','require')
+            ->append('title','require|token')
+            ->append('keywords','max:50')
+            ->append('description','max:500')
+            ->append('content','max:5000')
+            ->append('category_id','require')
+            ->append('user_id','require')
+            ->rename('id','文章ID')
+            ->rename('title','文章标题')
+            ->rename('content','内容')
             ->rename('category_id','栏目ID')
             ->rename('user_id','用户ID');
     }
     // 文章 新增
     public function sceneArticleCreate()
     {
-        return $this->only(['title' ,'keywords','description','content','category_id','user_id'])
-            ->append('title','token')
+        return $this->only(['title'])
+            ->append('title','require|token')
+            ->append('keywords','max:50')
+            ->append('description','max:500')
+            ->append('content','max:5000')
+            ->append('category_id','require')
+            ->append('user_id','require')
+            ->rename('title','文章标题')
+            ->rename('content','内容')
             ->rename('category_id','栏目ID')
             ->rename('user_id','用户ID');
     }
-    // 文章 删除
-    public function sceneArticleDelete()
-    {
-        return $this->only(['id'])->append('id', 'require');
-    }
+    
     // 产品 更新
     public function sceneProductUpdate()
     {
-        return $this->only(['id','title','keywords','description',
-            'name','model','category_id','serial_number',
-            'preview','content'])
-            ->append('id', 'require')
-            ->remove('model','require')
-            ->remove('serial_number','require')
-            ->rename('name','产品名称');
+        return $this->only(['id'])
+            ->append('id','require')
+            ->rename('id','产品ID')
+            ->append('title','require|token')
+            ->rename('title','页面标题')
+            ->append('keywords','max:50')
+            ->rename('keywords','页面关键词')
+            ->append('description','max:500')
+            ->rename('description','页面描述')
+            ->append('content','max:5000')
+            ->append('content','页面内容')
+            ->append('category_id','require')
+            ->rename('category_id','栏目ID')
+            ->append('name','require|max:200')
+            ->rename('name','产品名称')
+            ->append('model','max:200')
+            ->rename('model','产品型号')
+            ->append('serial_number','max:200')
+            ->rename('serial_number','产品序列号')
+            ->append('preview','length:10')
+            ->rename('preview','预览图');
     }
     // 产品 新增
     public function sceneProductCreate()
     {
-        return $this->only(['title','keywords','description',
-            'name','model','category_id','serial_number','preview','content'])
-            ->remove('model','require')
-            ->remove('serial_number','require')
-            ->rename('name','产品名称');
+        return $this->only(['name'])
+            ->append('title','require|token')
+            ->rename('title','页面标题')
+            ->append('keywords','max:50')
+            ->rename('keywords','页面关键词')
+            ->append('description','max:500')
+            ->rename('description','页面描述')
+            ->append('content','max:5000')
+            ->append('content','页面内容')
+            ->append('category_id','require')
+            ->rename('category_id','栏目ID')
+            ->append('name','require|max:200')
+            ->rename('name','产品名称')
+            ->append('model','max:200')
+            ->rename('model','产品型号')
+            ->append('serial_number','max:200')
+            ->rename('serial_number','产品序列号')
+            ->append('preview','length:10')
+            ->rename('preview','预览图');
     }
     // 站点配置
     public function sceneSiteSave()
     {
-        return $this->only(['name','cname','content'])
-            ->remove('name','min')
+        return $this->only(['name'])
             ->append('name','unique:qiyun_site|min:3')
-            ->remove('cname','min')
+            ->rename('name','调用名称')
             ->append('cname','min:4')
             ->rename('cname','配置描述')
-            ->rename('name','调用名称')
+            ->append('content','max:200')
             ->rename('content','配置值');
     }
     // 站点配置
     public function sceneSiteUpdate()
     {
-        return $this->only(['id','name','cname','content'])
-            ->remove('cname','min')
+        return $this->only(['id'])
+            ->append('id','require')
+            ->rename('id','获取索引失败！索引')
             ->append('cname','min:4')
-            ->append('name','unique:qiyun_site|min:3')
             ->rename('cname','配置描述')
+            ->append('name','unique:qiyun_site|min:3')
             ->rename('name','调用名称')
-            ->rename('content','配置值')
-            ->rename('id','获取索引失败！索引');
+            ->append('content','max:200')
+            ->rename('content','配置值');
     }
     // 栏目 更新
     public function sceneCategoryUpdate()
     {
-        return $this->only(['cname','path','parent'])
+        return $this->only(['id'])
+            ->append('id','require')
+            ->rename('id','栏目索引ID')
             ->append('cname','require|max:100')
-            ->append('path','require|max:100|alphaDash|exclude|unique:qiyun_category')
-            ->append('parent','require|number')
-            ->append('view','alpha|max:20')
-            ->append('type_view','alpha|max:20')
             ->rename('cname','栏目名称')
+            ->append('path','require|max:100|alphaDash|exclude|unique:qiyun_category')
             ->rename('path','路径')
+            ->append('parent','require|number')
             ->rename('parent','父级索引')
+            ->append('view','alpha|max:20')
             ->rename('view','栏目模板')
+            ->append('type_view','alpha|max:20')
             ->rename('type_view','内容页模板');
     }
     // 栏目 新增
     public function sceneCategorySave()
     {
-        return $this->only(['cname','path','parent'])
+        return $this->only(['cname'])
             ->append('cname','require|max:100')
-            ->append('path','require|max:100|alphaDash|exclude|unique:qiyun_category')
-            ->append('parent','require|number')
-            ->append('view','alpha|max:20')
-            ->append('type_view','alpha|max:20')
             ->rename('cname','栏目名称')
+            ->append('path','require|max:100|alphaDash|exclude|unique:qiyun_category')
             ->rename('path','路径')
+            ->append('parent','require|number')
             ->rename('parent','父级索引')
+            ->append('view','alpha|max:20')
             ->rename('view','栏目模板')
+            ->append('type_view','alpha|max:20')
             ->rename('type_view','内容页模板');
     }
     // 用户
     public function sceneUserLogin()
     {
-        return $this->only(['name','password','captcha'])->rename(['name'=>'用户名']);
+        return $this->only(['captcha'])
+            ->append('name','require|min:5|max:50|alphaDash')
+            ->rename('name','用户名')
+            ->append('password','require|min:5|max:200|alphaDash')
+            ->rename('password','密码');
     }
     // 主题 创建文件夹
     public function sceneThemeCreateDir()
     {
-        return $this->only(['theneName','dirName'])
+        return $this->only(['theneName'])
             ->append('themeName','require|alpha|max:20')
-            ->append('dirName','require|alpha|max:20')
             ->rename('themeName','主题名称')
+            ->append('dirName','require|alpha|max:20')
             ->rename('dirName','文件');
     }
     // 主题 创建模板文件
     public function sceneThemeCreateFile()
     {
-        return $this->only(['themeName','fileName'])
+        return $this->only(['themeName'])
             ->append('themeName',['require','alpha','max:20'])
-            ->append('fileName',['require','alpha','max:20'])
-            ->append('dirName','alpha|max:20')
             ->rename('themeName','主题名称')
-            ->rename('fileName','文件名');
+            ->append('fileName',['require','alpha','max:20'])
+            ->rename('fileName','文件名')
+            ->append('dirName','alpha|max:20')
+            ->rename('dirName','文件夹');
     }
     // 主题 删除目录或文件
     public function sceneThemeRemove()
     {
-        return $this->only(['themeName','dirName','fileName'])
+        return $this->only(['themeName'])
             ->append('themeName','require|alpha|max:20')
-            ->append('dirName','require|alpha|max:20')
-            ->append('fileName','alpha|max:20')
             ->rename('themeName','主题名称')
+            ->append('fileName','alpha|max:20')
+            ->rename('fileName','文件名称')
+            ->append('dirName','require|alpha|max:20')
             ->rename('dirName','文件夹');
     }
     // 主题 删除主题目录下的文件
@@ -240,5 +231,16 @@ class Valid extends Validate
             ->append('fileName','require|alpha|max:20')
             ->rename('themeName','主题名称')
             ->rename('fileName','文件');
+    }
+    // 任务 采集任务-测试
+    public function sceneTaskCollect()
+    {
+        return $this->only(['list_page'])
+            ->append('list_page','require|url')
+            ->rename('list_page','列表地址')
+            ->rename('list_reg','列表规则')
+            ->rename('title_reg','标题规则')
+            ->rename('content_reg','主体规则')
+            ->rename('replace_reg','替换规则');
     }
 }

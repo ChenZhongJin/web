@@ -10,7 +10,8 @@
 <body>
     <div class="container">
         <form action="" class="w-50 my-3">
-            <input type="hidden" name="token" value="{$Request.token}">
+            {:token()}
+            <!-- <input type="hidden" name="token" value="{$Request.token}"> -->
             <div class="form-group">
                 <small>用户名</small>
                 <input type="text" class="form-control" name="name" value="{$Think.session.form.name}">

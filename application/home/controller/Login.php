@@ -56,9 +56,9 @@ class Login extends Controller
      * @param Request $request
      * @param User $user
      *
-     * @route('/login/out')->name('logout')
+     * @route('/logout','post')->name('logout')
      */
-    public function logOut(Request $request, User $user)
+    public function logOut(Request $request)
     {
         Session::delete('user');
         return Unity::success('已注销', 'homepage');

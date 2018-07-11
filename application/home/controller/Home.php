@@ -97,4 +97,5 @@ class Home extends Controller
         $data = $cats->getByPath($path);
         return $this->fetch($data->view);
     }
+    
 }
