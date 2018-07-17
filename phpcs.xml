@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset>
+<rule ref="Generic.Files.LineLength">
+  <properties>
+   <property name="lineLimit" value="90"/>
+   <property name="absoluteLineLimit" value="100"/>
+  </properties>
+ </rule>
+ <rule ref="Generic.Files.LineLength">
+  <properties>
+   <property phpcs-only="true" name="lineLimit" value="180"/>
+   <property phpcbf-only="true" name="lineLimit" value="220"/>
+  </properties>
+ </rule>
+ </ruleset>

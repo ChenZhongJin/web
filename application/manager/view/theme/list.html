@@ -1,0 +1,75 @@
+{extend name="layout"/} {block name="warp"}
+<div class="container">
+    <div class="row">
+        <div class="w-100 my-3">
+            <form id="theme" class="w-50">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="name" placeholder="">
+                        <input type="hidden" name="themeName" value="{$themeName}"> {if $dirName}
+                        <input type="hidden" name="dirName" value="{$dirName}"> {/if}
+                        <span class="input-group-append">
+                            <a href="{:url('_theme_create_file')}" class="btn btn-secondary btn-sm pt-2 rounded-0" id="createFile">创建模板</a>
+                        </span>
+                        <span class="input-group-append">
+                            <a href="{:url('_theme_create_dir')}" class="btn btn-secondary btn-sm pt-2 rounded-0" id="createDir">创建目录</a>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="table table-hover" id="theme">
+            <tbody>
+                {foreach $dirs as $dir=>$path}
+                <tr>
+                    <td><i class="far fa-folder"></i>
+                        <a href="{:url('_themeList',['themeName'=>$themeName,'dir'=>$dir])}" class="text-muted">{$dir}</a>
+                    </td>
+                    <td class="text-right">
+                        <a href="{:url('_themeRemove',['themeName'=>$themeName,'dirName'=>$dir])}" class="btn btn-sm btn-danger rounded-0" id="rm">删除</a>
+                    </td>
+                </tr>
+                {/foreach} {foreach $files as $file=>$filepath}
+                <tr>
+                    <td><i class="far fa-file-code"></i> {$file}</td>
+                    <td class="text-right">
+                        {if $dirName}
+                        <a href="{:url('_themeEdit',['themeName'=>$themeName,'dirName'=>$dirName,'fileName'=>$file])}" class="btn btn-sm btn-secondary rounded-0">编辑</a>
+                        <a href="{:url('_themeRemove',['themeName'=>$themeName,'dirName'=>$dirName,'fileName'=>$file])}" class="btn btn-sm btn-danger rounded-0" id="rm">删除</a>
+                        {else /}<a href="{:url('_themeEditRoot',['themeName'=>$themeName,'fileName'=>$file])}" class="btn btn-sm btn-secondary rounded-0">编辑</a>
+                        <a href="{:url('_themeRm',['themeName'=>$themeName,'fileName'=>$file])}" class="btn btn-sm btn-danger rounded-0" id="rm">删除</a>
+                        {/if}
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block} {block name="warpJS"}
+<script>
+    (function () {
+        var nodeForm = document.querySelector('form#theme');
+        var table = document.querySelector('table#theme');
+        nodeForm.querySelector('a#createDir').addEventListener('click', function (event) {
+            event.preventDefault();
+            var data = jQuery(nodeForm).serializeArray();
+            var ipt = nodeForm.querySelector('input[name=name]').value;
+            data.push({ name: 'dirName', value: ipt });
+            ajax(event.target.href, data);
+        })
+        nodeForm.querySelector('a#createFile').addEventListener('click', function (event) {
+            event.preventDefault();
+            var data = jQuery(nodeForm).serializeArray();
+            var ipt = nodeForm.querySelector('input[name=name]').value;
+            data.push({ name: 'fileName', value: ipt });
+            ajax(event.target.href, data);
+        })
+        table.querySelectorAll('a#rm').forEach(function(element){
+            element.addEventListener('click',function(event){
+                event.preventDefault();
+                ajax(event.target.href,null);
+            })
+        })
+    })()
+</script> {/block}

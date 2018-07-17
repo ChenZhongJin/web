@@ -1,0 +1,163 @@
+{extend name="layout"/} {block name="warp"}
+<div class="container">
+    <div class="row">
+        <form action="" class="w-100 my-2" id="product">
+            {:token()}
+            <input type="hidden" name="id" value="{$data.id}">
+            <div class="form-row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <small >产品名称</small>
+                        <input type="text" name="name" class="form-control" value="{$data.name}">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <small >产品型号</small>
+                        <input type="text" name="model" class="form-control" value="{$data.model}">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <small >所属系列</small>
+                        <select name="category_id" class="form-control">
+                            {foreach $list as $item}
+                            <option value="{$item.id}" {if $data.category_id==$item.id}selected{/if}>{$item.cname}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <small >产品序列号</small>
+                        <input type="text" name="serial_number" class="form-control" value="{$data.serial_number}">
+                    </div>
+                </div>
+                <div class="col-6" id="previews">
+                    <p>产品预览图</p>
+                    {if $data} {foreach $data.preview as $img}
+                    <div class="preview">
+                        <img src="{$img.src}" class="img-fluid">
+                        <input type="hidden" name="preview[{$img.alt}]" value="{$img.src}">
+                    </div>
+                    {/foreach} {/if}
+                    <div class="product-upimg">
+                        <label for="upimg" class="btn btn-sm">上传图片</label>
+                        <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"></div>
+                        <input type="file" class="d-none" id="upimg" accept="image/*">
+                    </div>
+                </div>
+                <div class="col-6" id="preview_show">
+                </div>
+                <div class="col-12 mb-2">
+                    <small>产品特点</small>
+                    <textarea id="edit-trait" class="form-control">{$data.trait}</textarea>
+                </div>
+                <div class="col-12 mb-2">
+                    <small>产品页面内容</small>
+                    <textarea id="edit" class="form-control">{$data.content}</textarea>
+                </div>
+                <div class="col-12">
+                    {if $data}
+                    <a href="{:url('_product_update')}" class="btn btn-sm btn-dark rounded-0" id="send">更新</a>
+                    {else/}
+                    <a href="{:url('_product_save')}" class="btn btn-sm btn-dark rounded-0" id="send">保存</a>
+                    {/if}
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <small >页面标题</small>
+                        <input type="text" class="form-control" name="title" value="{$data.title}">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <small >页面关键字</small>
+                        <input type="text" class="form-control" name="keywords" value="{$data.keywords}">
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <small >页面描述</small>
+                        <textarea name="description" id="description" class="form-control">{$data.description}</textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}{block name="warpJS"}{include file="editor"/}
+<script src="/static/axios.min.js"></script>
+<script>
+    (function () {
+        // 编辑器-产品特点
+        tinymce.init({selector:'textarea#edit-trait',height: 300,
+            menubar: false,plugins: ['code','lists'], toolbar: 'code bullist numlist removeformat'});
+        // 注册预览事件
+        function eventLister(element) {
+            // 预览事件
+            element.addEventListener("mouseenter", function (event) {
+                var show = document.querySelector('div#preview_show img');
+                if (show) {
+                    show.src = element.querySelector('img').src;
+                } else {
+                    var nodeImg = document.createElement('img');
+                    nodeImg.classList.add('img-fluid');
+                    nodeImg.src = element.querySelector('img').src;
+                    document.querySelector('div#preview_show').insertAdjacentElement('afterbegin', nodeImg);
+                }
+            });
+            // 删除事件
+            element.addEventListener('click', function (event) {
+                document.querySelector('div#previews').removeChild(element);
+                var previewShow = document.querySelector('div#preview_show');
+                previewShow.removeChild(previewShow.querySelector('img'));
+            })
+        }
+        // 更新图片列表
+        function updateImg(imgURL, imgName) {
+            var tip = Date.now();
+            var node = `<div class="preview tip-${tip}"><img src="${imgURL}" class="img-fluid"><input type="hidden" name="preview[${imgName}]" value="${imgURL}"></div>`
+            document.querySelector('div.product-upimg').insertAdjacentHTML('beforeBegin', node);
+            // 为新节点注册事件
+            var newNode = document.querySelector('div.tip-' + tip);
+            eventLister(newNode);
+        }
+        // 图片预览
+        document.querySelectorAll('div.preview').forEach(function (k) {
+            eventLister(k);
+        })
+        // 图片上传
+        document.querySelector('input#upimg').addEventListener('change', function (event) {
+            var file = event.target.files[0];
+            var formData = new FormData();
+            formData.append('file', file);
+            if (file) {
+                axios({
+                    url: "{:url('_unity_upimg')}",
+                    method: 'POST',
+                    data: formData,
+                    onUploadProgress: function (progressEvent) {
+                        var bar = document.querySelector('div.product-upimg').children[1];
+                        bar.style.width = ((progressEvent.loaded / progressEvent.total) * 100 + '%');
+                    },
+                }).then(function (resp) {
+                    if (resp.data.code == 1) {
+                        updateImg(resp.data.location, resp.data.name);
+                        notify({ code: 1, msg: resp.data.name });
+                    } else { notify(resp.data) }
+                    // 重置进度条
+                    document.querySelector('div.progress-bar').style.width = '0%';
+                })
+            }
+        });
+        // 更新资源
+        document.querySelector('a#send').addEventListener('click' ,function(event){
+            event.preventDefault();
+            var data = jQuery('form#product').serializeArray();
+            data.push({name:'content',value: tinymce.get('edit').getContent()});
+            data.push({name:'trait',value:tinymce.get('edit-trait').getContent()});
+            ajax(event.target.href,data);
+        })
+    })()
+</script> {/block}
