@@ -7,16 +7,18 @@ use think\facade\Session;
 
 class Article extends Model
 {
+
     protected       $table = 'qiyun_article';
-    protected       $auto  = ['create_time','user_id','description' ,'keywords'];
+    protected       $autoWriteTimestamp = true;
+    protected       $auto  = ['user_id','description' ,'keywords'];
     protected function setUserIdAttr($id)
     {
         return $id?$id:Session::get('user.id');
     }
-    protected function setCreateTimeAttr($time)
-    {
-        return time();
-    }
+    // protected function setCreateTimeAttr($time)
+    // {
+    //     return time();
+    // }
     protected function setKeywordsAttr($words)
     {
         if (empty($words)) {

@@ -73,6 +73,7 @@ class Unity
         } else if(is_string($url)) {
             $url = Url::build($url);
         } else {
+            // 不解析URL
             $url = null;
         }
         $response = [
@@ -85,11 +86,12 @@ class Unity
     }
     public static function success($msg = '', $url = null, $options=[])
     {
-        return self::response(1, $msg, $url, $options);
+        return self::response(1, '完成:'.$msg, $url, $options);
     }
     public static function error($msg = '', $url = null, $options=[])
     {
-        return self::response(0, $msg, $url, $options);
+        !array_key_exists('wait',$options) && $options['wait']=3;
+        return self::response(0, '失败:'.$msg, $url, $options);
     }
     /**
      * 数据验证
