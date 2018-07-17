@@ -1,5 +1,5 @@
 #root
 /.vscode/
-/confing/database.php
+/config/database.php
 *.log
 .env
