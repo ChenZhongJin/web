@@ -240,34 +240,34 @@ class Valid extends Validate
     // 任务 采集任务 新增
     public function sceneTaskCollectAdd()
     {
-        return $this->only(['name','uri','css_list'])
+        return $this->only(['name','link','xpath_list'])
         ->append('name', 'require|max:200')
         ->rename('name', '任务名称/描述')
-        ->append('uri', 'require|url')
-        ->rename('uri', '列表页')
-        ->append('css_list', 'require|max:200')
-        ->rename('css_list', '采集量');
+        ->append('link', 'require|url')
+        ->rename('link', '列表页地址')
+        ->append('xpath_list', 'require|max:200')
+        ->rename('xpath_list', '采集量');
     }
     // 任务 采集任务 更新
     public function sceneTaskCollectUpdate()
     {
-        return $this->only(['id' ,'name','uri','css_list'])
+        return $this->only(['id' ,'name','link','xpath_list'])
         ->append('id','require|number')
         ->rename('id','任务索引')
         ->append('name', 'require|max:200')
         ->rename('name', '任务名称/描述')
-        ->append('uri', 'require|url')
-        ->rename('uri', '列表页')
-        ->append('css_list', 'require|max:200')
-        ->rename('css_list', '采集量');
+        ->append('link', 'require|url')
+        ->rename('link', '列表页地址')
+        ->append('xpath_list', 'require|max:200')
+        ->rename('xpath_list', '采集量');
     }
     // 任务 采集任务 测试
     public function sceneTaskTest()
     {
-        return $this->only(['uri','css_list'])
-        ->append('uri', 'require|url')
-        ->rename('uri', '列表页')
-        ->append('css_list','require')
-        ->rename('css_list','规则');
+        return $this->only(['link','xpath_list'])
+        ->append('link', 'require|url')
+        ->rename('link', '列表页地址')
+        ->append('xpath_list','require')
+        ->rename('xpath_list','规则');
     }
 }

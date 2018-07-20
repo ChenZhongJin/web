@@ -63,10 +63,10 @@ class Task extends Base
     public function collectTest(Request $request)
     {
         $data = $request->param();
-        // $valid= Unity::valid($data, 'TaskTest');
-        // if ($valid !==true) {
-        //     return json($valid);
-        // }
+        $valid= Unity::valid($data, 'TaskTest');
+        if ($valid !==true) {
+            return json($valid);
+        }
         $headers = [
             'User-Agent'=>'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         ];
@@ -79,15 +79,20 @@ class Task extends Base
         ]);
         // 开始捕获内页链接列表
         $body = $client->get($data['link'])->getBody()->getContents();
-        $dom  = new \Symfony\Component\DomCrawler\Crawler($body);
-        $parse = $br ='<br>';
+        $dom  = new Crawler($body);
+        $br   ='<br>';
         $URIs = [];
-        $parse.= '捕获的内页链接' .$br;
-        $dom->filterXPath($data['xpath_list'])->filter('a')->each(function(Crawler $crawler ,$i)use(&$URIs,&$parse,&$br){
-            $link = $crawler->attr('href');
-            $URIs[] = $link;
-            $parse.= $link .$br;
-        });
+        $parse= '捕获的内页链接' .$br;
+        try {
+            $dom->filterXPath($data['xpath_list'])->filter('a')->each(function(Crawler $crawler ,$i)use(&$URIs,&$parse,&$br){
+                $link = $crawler->attr('href');
+                $URIs[] = $link;
+                $parse.= $link .$br;
+            });
+        } catch (\Exception $error) {
+            $parse = '捕获内页链接失败！';
+            return $parse;
+        }
         // 解析内页
         if(count($URIs)==0){
             return '没有找到有效链接';
@@ -95,31 +100,43 @@ class Task extends Base
         unset($body);
         unset($dom);
         $body = $client->get($URIs[0])->getBody()->getContents();
-        $dom  = new \Symfony\Component\DomCrawler\Crawler($body);
+        $dom  = new Crawler($body);
         // 处理标题
         try {
             $title = $dom->filterXPath($data['xpath_title'])->text();
-            $exp = explode('=>',$data['replace_title']);
+            $parse.= '捕获的标题' .$br;
+            $parse.= $this->replace($data['replace_title'],$title) .$br;
         } catch (\Exception $error) {
-            return '捕获标题失败！';
+            $parse .= '捕获标题失败！';
+            return $parse;
         };
-        dump($exp);
-        // if (strpos($data['replace_title'],'|')!==false) {
-        //     list($sec,$rep) = 
-        //     $title = str_replace($sec,$rep,$title);
-        // }
-        // $parse.= '捕获的标题' .$br;
-        // $parse.= $title.$br;
-        // // 处理正文
-        // $css_content = $data['css_content'];
-        // $content = $dom->filterXPath($css_content)->text();
-        // if (strpos($data['replace_title'],'|') !==false) {
-        //     list($sec,$rep) = explode('|',$data['replace_title']);
-        //     $content = str_replace($sec,$rep,$content);
-        // }
-        // $parse.= '捕获的正文' .$br;
-        // $parse.= $content;
-        // return $parse;
+        $content='';
+        // 处理正文
+        try {
+            // 主区块
+            if(!empty($data['xpath_major'])) {
+                $major = $dom->filterXPath($data['xpath_major'])->html();
+                if(!empty($data['replace_major'])) {
+                    $major = preg_replace('@<('.$data['replace_major'].')[^>]*>.*?</\1>@','',$major);
+                }
+                $content .= $major;
+            }
+            // 次区块
+            if(!empty($data['xpath_minor'])){
+                $minor = $dom->filterXPath($data['xpath_minor'])->html();
+                if(!empty($data['replace_minor'])){
+                    $minor = preg_replace('@<('.$data['replace_major'].')[^>]*>.*?</\1>@','',$minor);
+                }
+                $content.= $minor;
+            }
+        } catch (\Exception $error) {
+            $parse = '捕获内容失败'.$br;
+            return $parse.$content;
+        }
+        // 处理字符替换 ，格式： [|][|]
+        $parse.= '最终效果' .$br;
+        $parse.= $this->replace($data['replace_string'],$content);
+        return $parse;
     }
     /**
      * 采集任务 删除
@@ -132,19 +149,34 @@ class Task extends Base
         return Unity::success('已删除', '_taskCollect');
     }
     /**
-     * @route('/test','get')
+     * 采集替换
+     * @param string $rule
+     * @return array|false
      */
-    public function testas()
+    private function formatReplaceRule($rule)
     {
-        $br = new \Buzz\Browser();
-        $req=$br->request('get', 'http://www.dytt8.net/');
-        $body = $req->getBody()->getContents();
-        $crawler = new \Symfony\Component\DomCrawler\Crawler($body);
-        $crawler->filter('div.co_content8 table')->each(function (Crawler $node, $i) {
-            dump($node->text());
-        });
-        // foreach ($crawler as $domElement) {
-        //     dump($domElement->nodeName);
-        // }
+        if(!empty($rule)) {
+            preg_match_all('@\[(.*?)\|(.*?)\]@',$rule,$matchs);
+            if(count($matchs[1]) >=1) {
+                return [$matchs[1],$matchs[2]];
+            }
+        }
+        return false;
+    }
+    /**
+     * 内容替换
+     * @param string $rule 内容替换
+     * @param string $content 被替换的内容
+     * @return string
+     */
+    private function replace($rule,$content)
+    {
+        $reps = $this->formatReplaceRule($rule);
+        if($reps) {
+            foreach ($reps[0] as $key=>$rep) {
+                $content = str_replace($rep,$reps[1][$key],$content);
+            }
+        }
+        return $content;
     }
 }

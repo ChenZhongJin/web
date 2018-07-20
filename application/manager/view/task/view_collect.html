@@ -79,7 +79,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <small>内容主区块替换规则</small>
+                            <small>删除的标签</small>
                             <input type="text" name="replace_major" class="form-control" value="{$data.replace_major}">
                         </div>
                     </div>
@@ -91,8 +91,14 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <small>内容次区块替换规则</small>
+                            <small>删除的标签</small>
                             <input type="text" name="replace_minor" class="form-control" value="{$data.replace_minor}">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <small>字符替换规则<code>[search|replace][sec|rep]</code></small>
+                            <input type="text" name="replace_string" class="form-control" value="{$data.replace_string}">
                         </div>
                     </div>
                 </div>
