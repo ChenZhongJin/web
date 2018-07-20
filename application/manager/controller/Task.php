@@ -38,7 +38,7 @@ class Task extends Base
         if ($valid !==true) {
             return Unity::error($valid);
         }
-        $detail->save($data);
+        $collect->save($data);
         return Unity::success('任务已添加', '_taskCollect');
     }
     /**
@@ -91,6 +91,7 @@ class Task extends Base
             });
         } catch (\Exception $error) {
             $parse = '捕获内页链接失败！';
+            dump($body);
             return $parse;
         }
         // 解析内页
@@ -142,9 +143,9 @@ class Task extends Base
      * 采集任务 删除
      * @route('/console/task/collect/del/:id','post')->name('_task_collect_del')
      */
-    public function collectDel($id, TaskDetail $detail)
+    public function collectDel($id, TaskCollect $collect)
     {
-        $data = $detail->get($id);
+        $data = $collect->get($id);
         $data->delete();
         return Unity::success('已删除', '_taskCollect');
     }

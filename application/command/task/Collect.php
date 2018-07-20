@@ -56,8 +56,6 @@ class Collect extends Command
         $dom->filterXPath($collect->xpath_list)->filter('a')->each(function(Crawler $crawler ,$i)use(&$URIs){
             $URIs[] = $crawler->attr('href');
         });
-        unset($body);
-        unset($dom);
         // 开始遍历
         foreach($URIs as $k => $link) {
             if($k >=5 ) {
@@ -67,21 +65,26 @@ class Collect extends Command
             $hasArtilce = Article::where('origin','=',$link)->find();
             if($hasArtilce) {
                 // 仅捕获新数据
-                break;
+                continue;
             }
             // 解析内页
             $articleData['origin'] = $link;
             $body = $client->get($link)->getBody()->getContents();
             $dom  = new Crawler($body);
             // 捕获标题
-            $title = $dom->filterXPath($collect->xpath_title)->text();
-            $articleData['title'] = $this->replace($collect->replace_title,$title);
-            
+            if(!empty($collect->xpath_title)) {
+                $title = $dom->filterXPath($collect->xpath_title)->text();
+                if(!empty($collect->replace_title)) {
+                    $title = $this->replace($collect->replace_title,$title);
+                }
+                $articleData['title'] = $title;
+            }
             // 捕获内容
             $content = '';
             // 主区块
             if(!empty($collect->xpath_major)) {
                 $major = $dom->filterXPath($collect->xpath_major)->html();
+
                 if(!empty($collect->replace_major)) {
                     $major = preg_replace('@<('.$collect->replace_major.')[^>]*>.*</\1>@','',$major);
                 }

@@ -25,6 +25,14 @@ class Article extends Model
             return '';
         }
     }
+    /**
+     * 获取文章第一张图片
+     */
+    protected function getImageAttr($v,$data)
+    {
+        preg_match('@<img.*?src=\"(.*?)\"[^>]*>@',$data['content'],$match);
+        return isset($match[1])?$match[1]:'';
+    }
     protected function setDescriptionAttr($desc,$data)
     {
         if (empty($desc)) {
@@ -34,6 +42,10 @@ class Article extends Model
             $desc = mb_substr($desc,0,200);
         }
         return $desc;
+    }
+    protected function getLinkAttr($v,$data)
+    {
+        return url('article' ,['id'=>$data['id']]);
     }
     public function user()
     {

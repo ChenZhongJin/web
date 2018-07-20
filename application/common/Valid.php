@@ -97,7 +97,7 @@ class Valid extends Validate
             ->append('description', 'max:500')
             ->rename('description', '页面描述')
             ->append('content', 'max:5000')
-            ->append('content', '页面内容')
+            ->rename('content', '页面内容')
             ->append('category_id', 'require')
             ->rename('category_id', '栏目ID')
             ->append('name', 'require|max:200')
@@ -106,7 +106,7 @@ class Valid extends Validate
             ->rename('model', '产品型号')
             ->append('serial_number', 'max:200')
             ->rename('serial_number', '产品序列号')
-            ->append('preview', 'length:10')
+            ->append('preview', 'max:10')
             ->rename('preview', '预览图');
     }
     // 产品 新增
@@ -120,7 +120,7 @@ class Valid extends Validate
             ->append('description', 'max:500')
             ->rename('description', '页面描述')
             ->append('content', 'max:5000')
-            ->append('content', '页面内容')
+            ->rename('content', '页面内容')
             ->append('category_id', 'require')
             ->rename('category_id', '栏目ID')
             ->append('name', 'require|max:200')
@@ -129,7 +129,7 @@ class Valid extends Validate
             ->rename('model', '产品型号')
             ->append('serial_number', 'max:200')
             ->rename('serial_number', '产品序列号')
-            ->append('preview', 'length:10')
+            ->append('preview', 'max:10')
             ->rename('preview', '预览图');
     }
     // 站点配置

@@ -11,11 +11,10 @@
         </div>
     </div>
 </div>
-<div class="container-fluid">
+<div class="container">
     <div class="row">
-        <div class="col-12 pt-3">
-            <h6>Product</h6>
-            <div class="dropdown-divider"></div>
+        <div class="col-12 pt-3 i-hmark">
+            <h6 class="text-center">Product</h6>
         </div>
         {foreach $products->where(['category_id'=>23])->limit(4)->select() as $item}
         <div class="col-5 offset-1 pt-3">
@@ -38,50 +37,73 @@
             </div>
         </div>
         {/foreach}
-        <div class="col-12 mt-5 mb-3">
-            <h6>Event <span class="text-danger">Made In China 2025</span></h6>
+        <div class="col-12 mt-5 mb-3 i-hmark">
+            <h6 class="text-center">Our Service</h6>
+            <div class="dropdown-divider"></div>
+        </div>
+        <div class="col-3 pt-2 text-center">
+            <i class="fa fa-heart i-icon"></i>
+            <p>Fantastic Support
+            </p>
+        </div>
+        <div class="col-3 pt-2 text-center">
+            <i class="fa fa-shipping-fast i-icon"></i>
+            <p>Shipping Fast</p>
+        </div>
+        <div class="col-3 pt-2 text-center">
+            <i class="fa fa-headset i-icon"></i>
+            <p>Online </p>
+        </div>
+        <div class="col-3 pt-2 text-center">
+            <i class="fa fa-users-cog i-icon"></i>
+            <p>Engineering Team
+            </p>
+        </div>
+
+        <div class="col-12 mt-5 mb-3 i-hmark">
+            <h6 class="text-center">Event
+                <span class="text-danger">Made In China 2025</span>
+            </h6>
             <div class="dropdown-divider"></div>
         </div>
         <div class="col-4 offset-1">
-            <p>紧急通知！国家能源局：各地电网不得以项目未纳入国补范围为由擅自停止补贴垫付</p>
-            <p>紧急通知！国家能源局：各地电网不得以项目未纳入国补范围为由擅自停止补贴垫付</p>
-            <p>紧急通知！国家能源局：各地电网不得以项目未纳入国补范围为由擅自停止补贴垫付</p>
+            {foreach $articles->order('id','desc')->limit(1)->select() as $item}
+            <p>
+                <a href="{$item.link}">{$item.title}</a>
+            </p>
+            <p>{$item.description}</p>
+            {/foreach}
         </div>
+        {foreach $articles->order('id','desc')->limit(2,3)->select() as $item}
         <div class="col-2">
             <div class="card">
-                <img src="/theme/fullsolar/es-1.jpg" class="img-fluid" alt="">
+                <img src="{$item.image}" class="img-fluid" alt="">
                 <div class="card-body">
-                    <p>河北正式印发《全省分布式光伏发电建设指导意见（试行）》 </p>
+                    <p>
+                        <a href="{$item.link}">{$item.title}</a>
+                    </p>
                 </div>
             </div>
         </div>
-        <div class="col-2">
-            <img src="/theme/fullsolar/es-2.jpg" class="img-fluid" alt="">
-            <p>紧急通知！国家能源局：各地电网不得以项目未纳入国补范围为由擅自停止补贴垫付</p>
-        </div>
-        <div class="col-2">
-            <img src="/theme/fullsolar/es-2.jpg" class="img-fluid" alt="">
-            <p>紧急通知！国家能源局：各地电网不得以项目未纳入国补范围为由擅自停止补贴垫付</p>
-        </div>
-        
-        <div class="col-12 mt-5 mb-3">
-            <h6>UNION</h6>
+        {/foreach}
+        <div class="col-12 mt-5 mb-3 i-hmark">
+            <h6 class="text-center">UNION</h6>
             <div class="dropdown-divider"></div>
         </div>
         <div class="col-2 offset-1">
-            <img src="/theme/fullsolar/logo.png" alt="">
+            <img src="/theme/fullsolar/ins_cisco.png" alt="">
         </div>
         <div class="col-2">
-            <img src="/theme/fullsolar/logo_inverse.png" alt="">
+            <img src="/theme/fullsolar/ins_gamescast.png" alt="">
         </div>
         <div class="col-2">
-            <img src="/theme/fullsolar/logo.png" alt="">
+            <img src="/theme/fullsolar/ins_ngreen.png" alt="">
         </div>
         <div class="col-2">
-            <img src="/theme/fullsolar/logo_inverse.png" alt="">
+            <img src="/theme/fullsolar/ins_vimeo.png" alt="">
         </div>
         <div class="col-2">
-            <img src="/theme/fullsolar/logo.png" alt="">
+            <img src="/theme/fullsolar/ins_spinwokrx.png" alt="">
         </div>
     </div>
 </div>
