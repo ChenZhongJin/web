@@ -1,0 +1,52 @@
+{extend name="layout"} {block name="title"}{$data.title}{/block} {block name="description"}{$data.description}{/block} {block
+name="warp"}
+<div class="container-fluid bg-info">
+    <div class="container py-2">
+        {foreach $categorys->where('parent','=',22)->select() as $category}
+        <a href="{$category->link}" class="btn btn-light rounded-0">{$category->cname}</a>
+        {/foreach}
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <img src="{$data.preview[0]['src']}" alt="{$data.preview[0]['alt']}" class="img-fluid">
+        </div>
+        <div class="col-4">
+            <p>
+                Product Name:{$data.name}
+            </p>
+            <p>Model:{$data.model}</p>
+            <p>所属系列：{$data.category.cname}</p>
+        </div>
+        <div class="col-4">
+            {$data.trait|raw}
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-12 bg-info ml-3" style="max-width:calc(100% - 30px);">
+                    <p class="text-light">Detail</p>
+                </div>
+            </div>
+            {$data.content|raw}
+        </div>
+        <div class="col-4">
+            <div class="row">
+                <div class="col-12 bg-info" style="max-width:calc(100% - 15px);">
+                    <p class="text-light">相关产品</p>
+                </div>
+                {foreach $products->order('id','desc')->limit(10)->select() as $product}
+                <div class="col-6 pl-0 mb-2">
+                    <div class="card border-light">
+                        <img class="card-img-top rounded-0" src="{$product->preview[0]['src']}" alt="{$product->preview[0]['alt']}">
+                        <div class="card-body">
+                            <a href="{$product->link}" class="card-link">{$product->category->cname} . {$product->name}</a>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

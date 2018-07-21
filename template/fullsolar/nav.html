@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand navbar-light bg-light sticky-top">
+    <a href="/" class="navbar-brand">
+        <img src="/theme/fullsolar/logo_inverse.png" alt="fullsolar logo" height="60px">
+    </a>
+    <div class="mr-auto"></div>
+    <div class="nav navbar-nav">
+        <a class="nav-item nav-link" href="{:url('products')}">Product</a>
+        <a class="nav-item nav-link" href="{:url('support')}">Support</a>
+        <a class="nav-item nav-link" href="{:url('event')}">Event</a>
+        <a class="nav-item nav-link" href="{:url('article',['id'=>34])}">About</a>
+    </div>
+    <div class="nav navbar-nav">
+        <a href="tel:{$site.phone}" class="nav-item nav-link"><i class="fa fa-phone-volume"></i> {$site.phone}</a>
+    </div>
+</nav>

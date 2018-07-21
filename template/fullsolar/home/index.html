@@ -1,0 +1,110 @@
+{extend name="layout"/} {block name="warp"}
+<div class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img class="d-block w-100" src="/theme/fullsolar/as_93.jpg" alt="First slide">
+            <div class="carousel-caption d-none d-md-block">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12 pt-3 i-hmark">
+            <h6 class="text-center">Product</h6>
+        </div>
+        {foreach $products->where(['category_id'=>23])->limit(4)->select() as $item}
+        <div class="col-5 offset-1 pt-3">
+            <img src="{$item.pic['src']}" class="img-fluid" alt="{$item.pic['alt']}">
+        </div>
+        <div class="col-5 pt-3 position-relative">
+            <p class="i-mark">{$item.category.cname}_{$item.name}</p>
+            <div class="position-absolute" style="bottom: 0;">{$item.trait|raw}
+                <a href="{$item.url}" class="btn btn-theme rounded-0">More</a>
+            </div>
+        </div>
+        {/foreach} {foreach $products->where(['category_id'=>23])->limit(4)->select() as $item}
+        <div class="col-5 offset-1 pt-3">
+            <img src="{$item.pic['src']}" class="img-fluid" alt="{$item.pic['alt']}">
+        </div>
+        <div class="col-5 pt-3 position-relative">
+            <p class="i-mark">{$item.category.cname}_{$item.name}</p>
+            <div class="position-absolute" style="bottom: 0;">{$item.trait|raw}
+                <a href="{$item.url}" class="btn btn-theme rounded-0">More</a>
+            </div>
+        </div>
+        {/foreach}
+        <div class="col-12 mt-5 mb-3 i-hmark">
+            <h6 class="text-center">Our Service</h6>
+            <div class="dropdown-divider"></div>
+        </div>
+        <div class="col-3 pt-2 text-center">
+            <i class="fa fa-heart i-icon"></i>
+            <p>Fantastic Support
+            </p>
+        </div>
+        <div class="col-3 pt-2 text-center">
+            <i class="fa fa-shipping-fast i-icon"></i>
+            <p>Shipping Fast</p>
+        </div>
+        <div class="col-3 pt-2 text-center">
+            <i class="fa fa-headset i-icon"></i>
+            <p>Online </p>
+        </div>
+        <div class="col-3 pt-2 text-center">
+            <i class="fa fa-users-cog i-icon"></i>
+            <p>Engineering Team
+            </p>
+        </div>
+
+        <div class="col-12 mt-5 mb-3 i-hmark">
+            <h6 class="text-center">Event
+                <span class="text-danger">Made In China 2025</span>
+            </h6>
+            <div class="dropdown-divider"></div>
+        </div>
+        <div class="col-4 offset-1">
+            {foreach $articles->order('id','desc')->limit(1)->select() as $item}
+            <p>
+                <a href="{$item.link}">{$item.title}</a>
+            </p>
+            <p>{$item.description}</p>
+            {/foreach}
+        </div>
+        {foreach $articles->order('id','desc')->limit(2,3)->select() as $item}
+        <div class="col-2">
+            <div class="card">
+                <img src="{$item.image}" class="img-fluid" alt="">
+                <div class="card-body">
+                    <p>
+                        <a href="{$item.link}">{$item.title}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {/foreach}
+        <div class="col-12 mt-5 mb-3 i-hmark">
+            <h6 class="text-center">UNION</h6>
+            <div class="dropdown-divider"></div>
+        </div>
+        <div class="col-2 offset-1">
+            <img src="/theme/fullsolar/ins_cisco.png" alt="">
+        </div>
+        <div class="col-2">
+            <img src="/theme/fullsolar/ins_gamescast.png" alt="">
+        </div>
+        <div class="col-2">
+            <img src="/theme/fullsolar/ins_ngreen.png" alt="">
+        </div>
+        <div class="col-2">
+            <img src="/theme/fullsolar/ins_vimeo.png" alt="">
+        </div>
+        <div class="col-2">
+            <img src="/theme/fullsolar/ins_spinwokrx.png" alt="">
+        </div>
+    </div>
+</div>
+{/block}

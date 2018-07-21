@@ -1,0 +1,8 @@
+{
+    "php.suggest.basic": false,
+    "phpcs.warningSeverity": 1,
+    "phpcs.errorSeverity": 8,
+    // "php-cs-fixer.executablePath": "php-cs-fixer",
+    "editor.fontFamily": "Consolas, 'Courier New', monospace,'楷体'",
+    "editor.fontSize": 16,
+}
