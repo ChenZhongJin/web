@@ -20,6 +20,10 @@ class Category extends Model
         $typeName = [1=>'文章' ,2=>'产品'];
         return $typeName[$data['type']];
     }
+    public function getLinkAttr($v,$data)
+    {
+        return url($data['path']);
+    }
     public function article()
     {
         return $this->hasMany('Article');

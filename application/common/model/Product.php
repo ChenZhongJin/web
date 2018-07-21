@@ -22,6 +22,7 @@ class Product extends Model
         }
         return $list;
     }
+    
     public function setPreviewAttr($preview,$data)
     {
         return json_encode($preview);
@@ -34,6 +35,10 @@ class Product extends Model
         return ['src','alt'];
     }
     public function getUrlAttr($n,$data)
+    {
+        return url('product',['id'=>$this->id]);
+    }
+    public function getLinkAttr($v,$data)
     {
         return url('product',['id'=>$this->id]);
     }

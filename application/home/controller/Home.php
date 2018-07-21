@@ -68,7 +68,7 @@ class Home extends Controller
     public function article(ArticleModel $article,$id)
     {
         $data = $article->get($id);
-        $this->assign('data',$data);
+        $this->assign('keywords',$data->keywords);
         return $this->fetch($data->category->type_view);
     }
     /**
