@@ -1,5 +1,0 @@
-#root
-/.vscode/
-/config/database.php
-*.log
-.env
