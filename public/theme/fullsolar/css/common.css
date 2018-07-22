@@ -49,3 +49,7 @@ nav a.nav-link:hover::before {
   font-size: 60px;
   color: #4d4d4d;
 }
+.content img {
+  max-width: 100%;
+  height: auto;
+}

@@ -1,0 +1,33 @@
+{extend name="layout"/}
+{block name="warp"}
+<div class="container">
+    <div class="row">
+        <div class="col-8 mt-3">
+            <h1>{$data.title}</h1>
+            {$data.content|raw}
+        </div>
+        <div class="col-4 mt-3">
+            <div class="row">
+                <div class="col-12 bg-dark text-white">
+                    Top
+                </div>
+                <div class="col-12">
+                    {foreach $articles->order('id','desc')->limit(6)->select() as $article}
+                    <a href="{$article.link}" class="d-block text-muted pl-2 pt-3">{$article.title}</a>
+                    {/foreach}
+                </div>
+                <div class="col-12 bg-dark text-white">
+                        Products
+                    </div>
+                    <div class="col-12">
+                        {foreach $products->order('id','desc')->limit(6)->select() as $product}
+                        <a href="{$product.link}" class="d-block text-muted pl-2 pt-3">{$product.title}</a>
+                        {/foreach}
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="warpJS"}
+{/block}

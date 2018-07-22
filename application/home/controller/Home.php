@@ -68,7 +68,7 @@ class Home extends Controller
     public function article(ArticleModel $article,$id)
     {
         $data = $article->get($id);
-        $this->assign('keywords',$data->keywords);
+        $this->assign('data',$data);
         return $this->fetch($data->category->type_view);
     }
     /**
@@ -88,14 +88,33 @@ class Home extends Controller
      * @param integer $page
      * @return void
      */
-    public function senseRoute(Request $request, $page=0)
+    public function senseRoute(Request $request,CategoryModel $categorys, $page=0)
     {
-        $path = $request->path();
-        $pos  = strpos($path, '/');
-        $pos && $path=substr($path,0,$pos);
-        $cats = new CategoryModel();
-        $data = $cats->getByPath($path);
-        return $this->fetch($data->view);
+        // 获取模型
+        // category.type [1 = article,2=product]; 
+        // 捕获分类路径
+        preg_match('@(\w+)/?@',$request->path(),$path);
+        $category = $categorys->getByPath($path[1]);
+        $pageRows = 2;
+        $pageOption = [
+            'list_rows' => $pageRows,
+            'path'      => '/'.$path[1].'/[PAGE].html'
+        ];
+        if($category->type==1) {
+            $page = $category->article()->order('id','desc')->paginate($pageRows,false,$pageOption);
+        } else if($category->type==2){
+            $page = $category->product()->order('id','desc')->paginate($pageRows,false,$pageOption);
+        }
+        // 替换分页CSS样式
+        $links = $page->render();
+        $links = preg_replace('@<li class="(.*?)">@','<li class="page-item \1">',$links);
+        $links = preg_replace('@<li>@','<li class="page-item">',$links);
+        $links = preg_replace('@<a(.*?)>@','<a class="page-link"\1>',$links);
+        $links = preg_replace('@<span>(.*?)</span>@','<a href="\1.html" class="page-link">\1</a>',$links);
+        $links = preg_replace('@<ul.*?>@','<ul class="pagination pagination-sm justify-content-center">',$links);
+        $this->assign('page',$page);
+        $this->assign('paginate',$links);
+        return $this->fetch($category->view);
     }
     
 }

@@ -17,9 +17,9 @@ return [
     // 数据库名
     'database'        => 'qiyun_cms',
     // 用户名
-    'username'        => 'root',
+    'username'        => 'qiyun',
     // 密码
-    'password'        => '',
+    'password'        => 'annrit',
     // 端口
     'hostport'        => '',
     // 连接dsn

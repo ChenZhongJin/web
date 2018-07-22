@@ -141,7 +141,7 @@ class Category extends Base
         $rule  = '<?php'.PHP_EOL;
         foreach ($data as $item) {
             $path  = strtolower($item->path);
-            $rule .= "Route::get('$path','$class')->name('$path');".PHP_EOL;
+            $rule .= "Route::get('/$path/[:page]','$class')->name('$path');".PHP_EOL;
             // $rule .= 'Route::get(\'/' .$item->path .'/[:page]\',\'' .$class .'\')->name(\''.$item->cname.'\');'.PHP_EOL;
         }
         $fs    = new Filesystem();
