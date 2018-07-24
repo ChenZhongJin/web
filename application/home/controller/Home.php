@@ -90,12 +90,12 @@ class Home extends Controller
      */
     public function senseRoute(Request $request,CategoryModel $categorys, $page=0)
     {
-        // 获取模型
+        // 分页处理
         // category.type [1 = article,2=product]; 
         // 捕获分类路径
         preg_match('@(\w+)/?@',$request->path(),$path);
         $category = $categorys->getByPath($path[1]);
-        $pageRows = 2;
+        $pageRows = 10;
         $pageOption = [
             'list_rows' => $pageRows,
             'path'      => '/'.$path[1].'/[PAGE].html'
@@ -114,6 +114,8 @@ class Home extends Controller
         $links = preg_replace('@<ul.*?>@','<ul class="pagination pagination-sm justify-content-center">',$links);
         $this->assign('page',$page);
         $this->assign('paginate',$links);
+        $data = $category;
+        $this->assign('data',$data);
         return $this->fetch($category->view);
     }
     

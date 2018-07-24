@@ -1,4 +1,4 @@
-{extend name="layout"} {block name="warp"}
+{extend name="layout"} {block name="title"}{$data.cname}{/block} {block name="warp"}
 <div class="container">
     <div class="row">
         <div class="col-8">
@@ -14,13 +14,38 @@
                     </a>
                 </div>
                 {/foreach}
+                
                 <div class="col-12 pt-5">
                     {$paginate|raw}
                 </div>
             </div>
         </div>
         <div class="col-4">
-
+            <div class="row">
+                <div class="col-12">
+                    <div class="Hlist mt-3">
+                        <div class="header">TOP</div>
+                        <div class="body">
+                            {foreach $articles->order('id','desc')->limit(10)->select() as $article}
+                            <a href="{$article.link}">{$article.title}</a>
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="Hlist">
+                        <div class="header">
+                            Products
+                        </div>
+                        <div class="body">
+                            {foreach $products->order('id','desc')->limit(10)->select() as $product}
+                            <img src="{$product.preview[0]['src']}" class="img-fluid" alt="{$product.title}">
+                            <a href="{$product.link}">{$product.title}</a>
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

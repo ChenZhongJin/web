@@ -1,4 +1,5 @@
 @color-theme:#6AC14A;
+@color-muted:#6c757d;
 .navbar .active
 {
     color: darken(@color-theme,20%) !important;
@@ -67,4 +68,72 @@ nav a.nav-link
         max-width: 100%;
         height: auto;
     }
+}
+.hr
+{
+    height: 1px;
+    width: 100%;
+    display: block;
+    position: relative;
+    &::before
+    {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background-color: #000;
+    }
+}
+.hr-25::before
+{
+    width: 25%;
+    left: 50% - 25%/2;
+}
+.hr-50::before
+{
+    width: 50%;
+    left: 50% - 50%/2;
+}
+.hr-75::before
+{
+    width: 75%;
+    left: 50% - 75%/2;
+}
+.hr-100::before
+{
+    width: 100%;
+    left: 50%;
+}
+.Hlist
+{
+    width: 100%;
+    display: block;
+    & .header
+    {
+        padding-left: 5px;
+        position: relative;
+        border-bottom: 2px solid @color-theme;
+        &::before
+        {
+            content: '';
+            position: absolute;
+            width: calc(~'100% - 50px');
+            bottom: -2px;
+            right: 0;
+            border-bottom: 2px solid @color-muted;
+        }
+    }
+    & .body
+    {
+        & a {
+            padding: 5px 5px;
+            display: block;
+            .link-reset;
+        }
+    }
+}
+.link-reset
+{
+    color: @color-muted;
 }

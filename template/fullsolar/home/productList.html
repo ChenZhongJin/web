@@ -1,16 +1,19 @@
-{extend name="layout"}
-{block name="warp"}
+{extend name="layout"} {block name="warp"}
 <div class="container">
     <div class="row">
         <div class="col-4">
             <div class="row">
-                <div class="col-12 mt-2 bg-dark text-white" style="">
-                    Categorys
-                </div>
-                <div class="col-12 pl-5">
-                    {foreach $categorys->where('parent','22')->select() as $category}
-                        <a href="{$category.link}" class="text-muted pt-3 d-block">{$category.cname}</a>
-                    {/foreach}
+                <div class="col-12">
+                    <div class="Hlist">
+                        <div class="header">
+                            Categorys
+                        </div>
+                        <div class="body">
+                            {foreach $categorys->where('parent','22')->select() as $category}
+                            <a href="{$category.link}" class="text-muted pt-3 d-block">{$category.cname}</a>
+                            {/foreach}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -21,7 +24,9 @@
                     <div class="card border-0">
                         <img src="{$product.preview[0]['src']}" class="card-img-top rounded-0" alt="{$product.preview[0]['alt']}">
                         <div class="card-body">
-                            <a href="{$product.link}" class="text-muted" title="{$product.title}"> <p class="card-text">{$product.name}</p></a>
+                            <a href="{$product.link}" class="text-muted" title="{$product.title}">
+                                <p class="card-text">{$product.name}</p>
+                            </a>
                             <p class="card-text text-muted">{$product.description}</p>
                         </div>
                     </div>
@@ -31,6 +36,4 @@
         </div>
     </div>
 </div>
-{/block}
-{block name="warpJS"}
-{/block}
+{/block} {block name="warpJS"} {/block}

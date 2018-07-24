@@ -39,7 +39,7 @@ class Product extends Base
      *
      * @param  int  $id
      * @return \think\Response
-     * @route('/console/product/[:id]','get')->name('_productEdit')
+     * @route('/console/product/edit/[:id]','get')->name('_productEdit')
      */
     public function edit($id=0, ProductModel $product, CategoryModel $cats)
     {

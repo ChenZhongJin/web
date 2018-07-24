@@ -1,33 +1,41 @@
-{extend name="layout"/}
+{extend name="layout"/}{block name="title"}{$data.title}_{$data.category.cname}{/block}
+{block name="description"}{$data.description}{/block}
 {block name="warp"}
 <div class="container">
     <div class="row">
         <div class="col-8 mt-3">
             <h1>{$data.title}</h1>
+            <span class="text-muted">{$data.create_time}</span>
+            <div class="hr"></div>
             {$data.content|raw}
         </div>
         <div class="col-4 mt-3">
             <div class="row">
-                <div class="col-12 bg-dark text-white">
-                    Top
+                <div class="col-12">
+                    <div class="Hlist">
+                        <div class="header">TOP</div>
+                        <div class="body">
+                            {foreach $articles->order('id','desc')->limit(10)->select() as $article}
+                            <a href="{$article.link}">{$article.title}</a>
+                            {/foreach}
+                        </div>
+                    </div>
                 </div>
                 <div class="col-12">
-                    {foreach $articles->order('id','desc')->limit(6)->select() as $article}
-                    <a href="{$article.link}" class="d-block text-muted pl-2 pt-3">{$article.title}</a>
-                    {/foreach}
+                    <div class="Hlist">
+                        <div class="header">
+                            Products
+                        </div>
+                        <div class="body">
+                            {foreach $products->order('id','desc')->limit(10)->select() as $product}
+                            <img src="{$product.preview[0]['src']}" class="img-fluid" alt="{$product.title}">
+                            <a href="{$product.link}">{$product.title}</a>
+                            {/foreach}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 bg-dark text-white">
-                        Products
-                    </div>
-                    <div class="col-12">
-                        {foreach $products->order('id','desc')->limit(6)->select() as $product}
-                        <a href="{$product.link}" class="d-block text-muted pl-2 pt-3">{$product.title}</a>
-                        {/foreach}
-                    </div>
             </div>
         </div>
     </div>
 </div>
-{/block}
-{block name="warpJS"}
-{/block}
+{/block} {block name="warpJS"} {/block}
